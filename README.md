@@ -1,40 +1,91 @@
-# Welcome to Remix!
+# Remix Auth Example
 
-- 📖 [Remix docs](https://remix.run/docs)
+A basic authentication setup using Remix, Prisma, and PostgreSQL with Docker.
 
-## Development
+## Prerequisites
 
-Run the dev server:
+- Node.js (v18 or higher)
+- Docker and Docker Compose
+- npm or yarn
 
-```shellscript
-npm run dev
+## Setup & Installation
+
+1. Clone the repository
+```
+git clone <repository-url>
+cd <project-directory>
 ```
 
-## Deployment
+Install dependencies
+```
+npm install
+```
+Environment Setup
 
-First, build your app for production:
+Copy the example environment file and update it with your values:
 
-```sh
-npm run build
+cp .env.example .env
+Your .env should contain:
+
+```
+DATABASE_URL="postgresql://remix_user:remix_password@localhost:5432/remix_db"
 ```
 
-Then run the app in production mode:
+Database Setup
 
-```sh
-npm start
+Make sure you have Docker running, then:
+
+```
+make db-start    # Starts PostgreSQL in Docker
+make init-db     # Runs initial Prisma migrations
 ```
 
-Now you'll need to pick a host to deploy it to.
 
-### DIY
+Start the development server
+```
+make dev
+```
+The application will be available at http://localhost:3000
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
 
-Make sure to deploy the output of `npm run build`
+Available Make Commands
 
-- `build/server`
-- `build/client`
+```
+make help - Show all available commands
+make install - Install dependencies
+make dev - Start everything for development
+make db-start - Start the database container
+make db-stop - Stop the database container
+make db-restart - Restart the database
+make db-logs - View database logs
+make migrate-dev - Run Prisma migrations
+make reset-all - Reset everything (database, migrations, node_modules)
+```
 
-## Styling
+Features
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+- User registration
+- User login/logout
+- Session management
+- Protected routes
+- PostgreSQL database
+- Password hashing with bcrypt
+
+Tech Stack
+
+- Remix
+- Prisma
+- PostgreSQL
+- Docker
+- bcryptjs
+- Tailwind CSS
+
+Development
+To add new database models:
+
+Update prisma/schema.prisma
+
+Run 
+```
+make migrate-dev to create and apply migrations
+```
