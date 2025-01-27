@@ -1,14 +1,9 @@
-import { json, redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from "@remix-run/node";
+import { type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { createUser } from "~/models/user.server";
-import { createUserSession, getUserId } from "~/services/session.server";
+import { createUserSession } from "~/services/session.server";
 import { Prisma } from "@prisma/client";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-    const userId = await getUserId(request);
-    if (userId) return redirect("/");
-    return null;
-}
 
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -25,7 +20,12 @@ export async function action({ request }: ActionFunctionArgs) {
         typeof lastName !== "string" ||
         (phone && typeof phone !== "string")
     ) {
-        return json({ error: "Please fill in all required fields" }, { status: 400 });
+        return new Response(JSON.stringify({ error: "Please fill in all required fields" }), {
+            status: 400,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
     }
 
     try {
@@ -39,12 +39,22 @@ export async function action({ request }: ActionFunctionArgs) {
         return createUserSession(user.id, "/");
     } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2002") {
-                return json({ error: "An account with this email already exists" }, { status: 400 });
+            if (typeof error === 'object' && error !== null && (error as {code?: string}).code === "P2002") {
+                return new Response(JSON.stringify({ error: "An account with this email already exists" }), {
+                    status: 400,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
             }
         }
         console.error("Registration error:", error);
-        return json({ error: "Something went wrong. Please try again." }, { status: 500 });
+        return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
+            status: 500,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
     }
 }
 
