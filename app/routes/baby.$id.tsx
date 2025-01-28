@@ -7,22 +7,22 @@ import { db } from "~/services/db.server";
 interface Elimination {
   id: number;
   type: string;
-  timestamp: string;
-  weight?: number;
+  timestamp: Date;
+  weight: number | null;
 }
 
 interface Sleep {
   id: number;
   type: string;
-  startTime: string;
-  quality?: number;
+  startTime: Date;
+  quality?: number | null;
 }
 
 interface Feeding {
   id: number;
   type: string;
-  startTime: string;
-  amount?: number;
+  startTime: Date;
+  amount?: number | null;
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
