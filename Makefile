@@ -75,4 +75,3 @@ format: ## Format code with Prettier
 
 test: ## Run vitest 
 	npm run test 
-	
