@@ -1,4 +1,4 @@
-/**added login page and / route */
+/** created file at routes/, added login page and "/" route */
 
 import { useState } from "react";
 import { json, redirect } from "@remix-run/node";
