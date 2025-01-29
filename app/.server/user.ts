@@ -1,5 +1,5 @@
-import { db } from "~/services/db.server";
-import { hashPassword, verifyPassword } from "~/services/auth.server";
+import { db } from "~/.server/db";
+import { hashPassword, verifyPassword } from "~/.server/auth";
 
 export type UserSignupData = {
     email: string;

@@ -1,4 +1,4 @@
-import { db } from "./db.server";
+import { db } from "./db";
 
 export async function addCaregiver(
   babyId: number,

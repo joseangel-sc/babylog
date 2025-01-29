@@ -1,7 +1,7 @@
 import { redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { requireUserId } from "~/services/session.server";
-import { createBaby } from "~/services/baby.server";
+import { requireUserId } from "~/.server/session";
+import { createBaby } from "~/.server/baby";
 
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await requireUserId(request);

@@ -1,7 +1,7 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, type TypedResponse } from "@remix-run/node";
 import { Form, useActionData, Link} from "@remix-run/react";
-import { createUserSession, getUserId } from "~/services/session.server";
-import { verifyLogin } from "~/models/user.server";
+import { createUserSession, getUserId } from "~/.server/session";
+import { verifyLogin } from "~/.server/user";
 import { redirect } from "@remix-run/node";
 
 type ActionData = {

@@ -1,8 +1,8 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
-import { getBaby } from "~/services/baby.server";
-import { requireUserId } from "~/services/session.server";
-import { db } from "~/services/db.server";
+import { getBaby } from "~/.server/baby";
+import { requireUserId } from "~/.server/session";
+import { db } from "~/.server/db";
 
 interface Elimination {
   id: number;

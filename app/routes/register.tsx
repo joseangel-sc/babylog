@@ -1,7 +1,7 @@
 import { type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { createUser } from "~/models/user.server";
-import { createUserSession } from "~/services/session.server";
+import { createUser } from "~/.server/user";
+import { createUserSession } from "~/.server/session";
 import { Prisma } from "@prisma/client";
 
 

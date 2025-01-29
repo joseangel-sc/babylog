@@ -1,12 +1,12 @@
 import { vi } from 'vitest';
+
+vi.mock('~/.server/baby', () => ({
+  getUserBabies: vi.fn()
+}));
+
 import { render, screen } from '@testing-library/react';
 import { createRemixStub } from '@remix-run/testing';
 import Dashboard from '~/routes/dashboard/route';
-import { json } from '@remix-run/node';
-
-vi.mock('~/services/baby.server', () => ({
-  getUserBabies: vi.fn()
-}));
 
 vi.mock('~/services/session.server', () => ({
   requireUserId: vi.fn(() => 'user-1')
@@ -14,14 +14,16 @@ vi.mock('~/services/session.server', () => ({
 
 describe('Dashboard', () => {
   it('renders empty state and Add Baby button', async () => {
-    const { getUserBabies } = await import('~/services/baby.server');
-    vi.mocked(getUserBabies).mockResolvedValue([]);
+    const { getUserBabies } = await import('~/.server/baby');
+    vi.mocked(getUserBabies).mockResolvedValueOnce([]);
 
     const RemixStub = createRemixStub([
       {
         path: '/',
         Component: Dashboard,
-        loader: () => json({ babies: [] }), // Mock the loader to return empty babies
+        loader: () => new Response(JSON.stringify({ babies: [] }), {
+          headers: { "Content-Type": "application/json" },
+        }),
       }
     ]);
 
@@ -32,8 +34,8 @@ describe('Dashboard', () => {
   });
 
   it('renders babies list', async () => {
-    const { getUserBabies } = await import('~/services/baby.server');
-    vi.mocked(getUserBabies).mockResolvedValue([
+    const { getUserBabies } = await import('~/.server/baby');
+    vi.mocked(getUserBabies).mockResolvedValueOnce([
       {
         id: 1,
         firstName: 'John',
@@ -50,7 +52,9 @@ describe('Dashboard', () => {
       {
         path: '/',
         Component: Dashboard,
-        loader: () => json({ babies: [{ id: '1', firstName: 'John', lastName: 'Doe', dateOfBirth: '2024-01-01' }] }), // Mock the loader to return a baby
+        loader: () => new Response(JSON.stringify({ babies: [{ id: '1', firstName: 'John', lastName: 'Doe', dateOfBirth: '2024-01-01' }] }), {
+          headers: { "Content-Type": "application/json" },
+        }),
       }
     ]);
 
