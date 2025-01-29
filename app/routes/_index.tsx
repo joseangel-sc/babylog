@@ -1,5 +1,3 @@
-/** created file at routes/, added login page and "/" route */
-
 import { useState } from "react";
 import { json, redirect } from "@remix-run/node";
 import { useActionData, Form } from "@remix-run/react";
