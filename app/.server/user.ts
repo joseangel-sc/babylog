@@ -38,7 +38,7 @@ export async function verifyLogin(email: string, password: string) {
     if (!user) return null;
     const isValid = await verifyPassword(password, user.passwordHash);
     if (!isValid) return null;
-
-    const { passwordHash: _, ...userWithoutPassword } = user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { passwordHash: _unused, ...userWithoutPassword } = user;
     return userWithoutPassword;
 }

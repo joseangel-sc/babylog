@@ -1,5 +1,5 @@
 import { db } from "./db";
-import type { Baby, User } from "@prisma/client";
+import type { Baby } from "@prisma/client";
 
 export async function createBaby(
     ownerId: number,
