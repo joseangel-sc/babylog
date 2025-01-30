@@ -1,5 +1,4 @@
-import { vi } from 'vitest';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { db } from '~/.server/db';
 
 import { hashPassword, verifyPassword, verifyLogin } from '~/.server/auth';

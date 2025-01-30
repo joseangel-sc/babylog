@@ -19,7 +19,7 @@ describe('database setup', () => {
 
   it('creates new PrismaClient in production', async () => {
     vi.stubEnv('NODE_ENV', 'production');
-    const { db } = await import('~/.server/db');
+    await import('~/.server/db');
     expect(PrismaClient).toHaveBeenCalled();
   });
 
