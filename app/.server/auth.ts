@@ -1,5 +1,5 @@
-import bcrypt from 'bcryptjs';
-import { db } from '~/services/db.server';
+import bcrypt from "bcryptjs";
+import { db } from "~/.server/db";
 
 const SALT_ROUNDS = 10;
 
