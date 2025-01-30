@@ -87,8 +87,9 @@ export default function TrackEventModal() {
         return (
           <>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Type</label>
+              <label htmlFor="elimination-type" className="block text-sm font-medium mb-1">Type</label>
               <select
+                id="elimination-type"
                 name="type"
                 className="w-full p-2 border rounded"
                 required
@@ -99,16 +100,18 @@ export default function TrackEventModal() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Weight (g)</label>
+              <label htmlFor="elimination-weight" className="block text-sm font-medium mb-1">Weight (g)</label>
               <input
+                id="elimination-weight"
                 type="number"
                 name="weight"
                 className="w-full p-2 border rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Notes</label>
+              <label htmlFor="elimination-notes" className="block text-sm font-medium mb-1">Notes</label>
               <textarea
+                id="elimination-notes"
                 name="notes"
                 className="w-full p-2 border rounded"
                 rows={3}
@@ -122,8 +125,9 @@ export default function TrackEventModal() {
         return (
           <>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Type</label>
+              <label htmlFor="feeding-type" className="block text-sm font-medium mb-1">Type</label>
               <select
+                id="feeding-type"
                 name="type"
                 className="w-full p-2 border rounded"
                 required
@@ -135,16 +139,18 @@ export default function TrackEventModal() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Amount (ml)</label>
+              <label htmlFor="feeding-amount" className="block text-sm font-medium mb-1">Amount (ml)</label>
               <input
+                id="feeding-amount"
                 type="number"
                 name="amount"
                 className="w-full p-2 border rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Notes</label>
+              <label htmlFor="feeding-notes" className="block text-sm font-medium mb-1">Notes</label>
               <textarea
+                id="feeding-notes"
                 name="notes"
                 className="w-full p-2 border rounded"
                 rows={3}
@@ -158,8 +164,9 @@ export default function TrackEventModal() {
         return (
           <>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Type</label>
+              <label htmlFor="sleep-type" className="block text-sm font-medium mb-1">Type</label>
               <select
+                id="sleep-type"
                 name="type"
                 className="w-full p-2 border rounded"
                 required
@@ -169,8 +176,9 @@ export default function TrackEventModal() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Quality (1-5)</label>
+              <label htmlFor="sleep-quality" className="block text-sm font-medium mb-1">Quality (1-5)</label>
               <input
+                id="sleep-quality"
                 type="number"
                 name="quality"
                 min="1"
@@ -179,8 +187,9 @@ export default function TrackEventModal() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Notes</label>
+              <label htmlFor="sleep-notes" className="block text-sm font-medium mb-1">Notes</label>
               <textarea
+                id="sleep-notes"
                 name="notes"
                 className="w-full p-2 border rounded"
                 rows={3}
@@ -209,8 +218,9 @@ export default function TrackEventModal() {
         
         <Form method="post">
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">When</label>
+            <label htmlFor="event-timestamp" className="block text-sm font-medium mb-1">When</label>
             <input
+              id="event-timestamp"
               type="datetime-local"
               name="timestamp"
               defaultValue={new Date().toISOString().slice(0, 16)}
