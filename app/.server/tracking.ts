@@ -51,7 +51,6 @@ export async function trackSleep(data: SleepData) {
   });
 }
 
-// Helper function to get recent tracking events for a baby
 export async function getRecentTrackingEvents(babyId: number, limit: number = 5) {
   const [eliminations, feedings, sleepSessions] = await Promise.all([
     db.elimination.findMany({

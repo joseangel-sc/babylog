@@ -22,16 +22,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   
-  const type = formData.get("type") as string;
-  const timestamp = new Date(formData.get("timestamp") as string);
-  const notes = formData.get("notes") as string | null;
-  
   await trackElimination({
     babyId: Number(params.id),
-    type,
-    timestamp,
+    type: formData.get("type") as string,
+    timestamp: new Date(formData.get("timestamp") as string),
     weight: formData.get("weight") ? Number(formData.get("weight")) : null,
-    notes,
+    notes: formData.get("notes") as string | null,
   });
 
   return redirect(`/baby/${params.id}`);
@@ -39,5 +35,41 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function TrackElimination() {
   const { baby } = useLoaderData<typeof loader>();
-  return <TrackingModal babyId={baby.id} />;
+  
+  const fields = [
+    {
+      id: "timestamp",
+      label: "When",
+      type: "datetime-local" as const,
+      required: true
+    },
+    {
+      id: "type",
+      label: "Type",
+      type: "select" as const,
+      required: true,
+      options: [
+        { value: "wet", label: "Wet" },
+        { value: "dirty", label: "Dirty" },
+        { value: "both", label: "Both" }
+      ]
+    },
+    {
+      id: "weight",
+      label: "Weight (g)",
+      type: "number" as const
+    },
+    {
+      id: "notes",
+      label: "Notes",
+      type: "textarea" as const,
+      placeholder: "Add any additional notes..."
+    }
+  ];
+
+  return <TrackingModal 
+    babyId={baby.id} 
+    title="Elimination"
+    fields={fields}
+  />;
 } 
