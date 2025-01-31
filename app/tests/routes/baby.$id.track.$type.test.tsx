@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { createRemixStub } from '@remix-run/testing';
-import { vi, expect, describe, test, beforeEach } from 'vitest';
+import { vi, expect, describe, test } from 'vitest';
 import TrackEvent from '~/routes/baby.$id.track.$type';
 import '@testing-library/jest-dom/vitest';
 import { json } from '@remix-run/node';

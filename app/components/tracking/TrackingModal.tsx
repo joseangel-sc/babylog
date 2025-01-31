@@ -1,4 +1,4 @@
-import { Form, useNavigate, useParams } from "@remix-run/react";
+import { Form, useNavigate } from "@remix-run/react";
 import { XIcon } from "lucide-react";
 import { useEffect } from "react";
 
