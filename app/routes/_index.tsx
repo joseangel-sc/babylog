@@ -1,13 +1,11 @@
-/** created file at routes/, added login page and "/" route */
-
 import { useState } from "react";
 import { json, redirect } from "@remix-run/node";
 import { useActionData, Form } from "@remix-run/react";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { createUserSession, getUserId } from "~/services/session.server";
-import { verifyLogin } from "~/services/auth.server";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { createUserSession, getUserId } from "~/.server/session";
+import { verifyLogin } from "~/.server/user"
 
-export async function loader({ request }) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/dashboard");
   return null;

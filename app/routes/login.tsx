@@ -1,8 +1,12 @@
-import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from "@remix-run/node";
+import { type ActionFunctionArgs, type LoaderFunctionArgs, type TypedResponse } from "@remix-run/node";
 import { Form, useActionData, Link} from "@remix-run/react";
-import { createUserSession, getUserId } from "~/services/session.server";
-import { verifyLogin } from "~/models/user.server";
+import { createUserSession, getUserId } from "~/.server/session";
+import { verifyLogin } from "~/.server/user";
 import { redirect } from "@remix-run/node";
+
+type ActionData = {
+  error?: string;
+};
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const userId = await getUserId(request);
@@ -16,19 +20,25 @@ export async function action({ request }: ActionFunctionArgs) {
     const password = formData.get("password");
 
     if (typeof email !== "string" || typeof password !== "string") {
-        return json({ error: "Invalid form data" }, { status: 400 });
+        return new Response(JSON.stringify({ error: "Invalid form data" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+        }) as TypedResponse<ActionData>;
     }
 
     const user = await verifyLogin(email, password);
     if (!user) {
-        return json({ error: "Invalid credentials" }, { status: 400 });
+        return new Response(JSON.stringify({ error: "Invalid credentials" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+        }) as TypedResponse;
     }
 
     return createUserSession(user.id, "/");
 }
 
 export default function Login() {
-    const actionData = useActionData<typeof action>();
+    const actionData = useActionData<ActionData>();
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">

@@ -72,3 +72,6 @@ lint: ## Run linter
 
 format: ## Format code with Prettier
 	npm run format || true
+
+test: ## Run vitest 
+	npm run test 

@@ -1,7 +1,6 @@
-import { useLoaderData, Form } from "@remix-run/react"; // Add Form import
-import { Link } from "@remix-run/react";
-import { requireUserId, logout } from "~/services/session.server"; // Add logout import
-import { getUserBabies } from "~/services/baby.server";
+import { Link, useLoaderData, Form } from '@remix-run/react';
+import { requireUserId, logout } from "~/.server/session";
+import { getUserBabies } from "~/.server/baby";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -10,7 +9,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { babies };
 }
 
-// Add logout action
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method.toLowerCase() === "post") {
     return logout(request);
@@ -26,7 +24,6 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold">My Babies</h1>
         <div className="flex gap-3">
           {" "}
-          {/* Add gap between buttons */}
           <Link
             to="/baby/new"
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

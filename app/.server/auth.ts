@@ -1,5 +1,5 @@
-import bcrypt from 'bcryptjs';
-import { db } from '~/services/db.server';
+import bcrypt from "bcryptjs";
+import { db } from "~/.server/db";
 
 const SALT_ROUNDS = 10;
 
@@ -28,6 +28,7 @@ export async function verifyLogin(email: string, password: string) {
     if (!isValid) return null;
 
     // Return user without the password hash
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash: _password, ...userWithoutPassword } = user;
     return userWithoutPassword;
 }
