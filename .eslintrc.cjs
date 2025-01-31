@@ -24,6 +24,10 @@ module.exports = {
   // Base config
   extends: ["eslint:recommended"],
 
+  rules: {
+    'eol-last': ['error', 'always']
+  },
+
   overrides: [
     // React
     {
