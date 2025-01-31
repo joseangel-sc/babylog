@@ -5,6 +5,7 @@ import { vi, expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 
 const mockNavigate = vi.fn();
+const mockAction = vi.fn();
 
 vi.mock('@remix-run/react', async () => {
   const actual = await vi.importActual('@remix-run/react');
@@ -17,6 +18,36 @@ vi.mock('@remix-run/react', async () => {
 
 describe('TrackingModal', () => {
   const babyId = 1;
+  const defaultFields = [
+    {
+      id: 'when',
+      label: 'When',
+      type: 'datetime-local' as const,
+      required: true
+    },
+    {
+      id: 'type',
+      label: 'Type',
+      type: 'select' as const,
+      options: [
+        { value: 'wet', label: 'Wet' },
+        { value: 'dirty', label: 'Dirty' }
+      ],
+      required: true
+    },
+    {
+      id: 'weight',
+      label: 'Weight (g)',
+      type: 'number' as const,
+      required: false
+    },
+    {
+      id: 'notes',
+      label: 'Notes',
+      type: 'textarea' as const,
+      required: false
+    }
+  ];
 
   beforeEach(() => {
     mockNavigate.mockClear();
@@ -26,7 +57,13 @@ describe('TrackingModal', () => {
     const RemixStub = createRemixStub([
       {
         path: '/baby/:id/track/elimination',
-        Component: () => <TrackingModal babyId={babyId} />,
+        Component: () => (
+          <TrackingModal 
+            babyId={babyId} 
+            title="elimination" 
+            fields={defaultFields}
+          />
+        ),
       },
     ]);
 
@@ -43,7 +80,13 @@ describe('TrackingModal', () => {
     const RemixStub = createRemixStub([
       {
         path: '/baby/:id/track/elimination',
-        Component: () => <TrackingModal babyId={babyId} />,
+        Component: () => (
+          <TrackingModal 
+            babyId={babyId} 
+            title="elimination" 
+            fields={defaultFields}
+          />
+        ),
       },
     ]);
 
@@ -59,7 +102,13 @@ describe('TrackingModal', () => {
     const RemixStub = createRemixStub([
       {
         path: '/baby/:id/track/elimination',
-        Component: () => <TrackingModal babyId={babyId} />,
+        Component: () => (
+          <TrackingModal 
+            babyId={babyId} 
+            title="elimination" 
+            fields={defaultFields}
+          />
+        ),
       },
     ]);
 
@@ -74,7 +123,17 @@ describe('TrackingModal', () => {
     const RemixStub = createRemixStub([
       {
         path: '/baby/:id/track/elimination',
-        Component: () => <TrackingModal babyId={babyId} />,
+        action: async ({ request }) => {
+          mockAction(request);
+          return null;
+        },
+        Component: () => (
+          <TrackingModal 
+            babyId={babyId} 
+            title="elimination" 
+            fields={defaultFields}
+          />
+        ),
       },
     ]);
 
@@ -97,17 +156,26 @@ describe('TrackingModal', () => {
     const submitButton = screen.getByRole('button', { name: /save/i });
     fireEvent.click(submitButton);
 
-    // Form submission is handled by Remix action, so we don't need to test the submission result here
+    // Verify form values are correct before submission
     expect(screen.getByLabelText('Type')).toHaveValue('wet');
     expect(screen.getByLabelText('Weight (g)')).toHaveValue(100);
     expect(screen.getByLabelText('Notes')).toHaveValue('Test notes');
+
+    // Verify the action was called
+    expect(mockAction).toHaveBeenCalled();
   });
 
   it('has required fields marked as required', () => {
     const RemixStub = createRemixStub([
       {
         path: '/baby/:id/track/elimination',
-        Component: () => <TrackingModal babyId={babyId} />,
+        Component: () => (
+          <TrackingModal 
+            babyId={babyId} 
+            title="elimination" 
+            fields={defaultFields}
+          />
+        ),
       },
     ]);
 
