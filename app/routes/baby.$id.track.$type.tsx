@@ -1,10 +1,120 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, useNavigate, useParams } from "@remix-run/react";
-import { useEffect } from "react";
+import { useLoaderData } from "@remix-run/react";
 import { getBaby } from "~/.server/baby";
 import { requireUserId } from "~/.server/session";
-import { XIcon } from "lucide-react";
 import { trackElimination, trackFeeding, trackSleep } from "~/.server/tracking";
+import { TrackingModal } from "~/components/tracking/TrackingModal";
+
+type TrackingType = 'elimination' | 'feeding' | 'sleep';
+
+const trackingConfigs = {
+  elimination: {
+    title: "Elimination",
+    fields: [
+      {
+        id: "timestamp",
+        label: "When",
+        type: "datetime-local" as const,
+        required: true
+      },
+      {
+        id: "type",
+        label: "Type",
+        type: "select" as const,
+        required: true,
+        options: [
+          { value: "wet", label: "Wet" },
+          { value: "dirty", label: "Dirty" },
+          { value: "both", label: "Both" }
+        ]
+      },
+      {
+        id: "weight",
+        label: "Weight (g)",
+        type: "number" as const
+      },
+      {
+        id: "notes",
+        label: "Notes",
+        type: "textarea" as const,
+        placeholder: "Add any additional notes..."
+      }
+    ]
+  },
+  feeding: {
+    title: "Feeding",
+    fields: [
+      {
+        id: "timestamp",
+        label: "When",
+        type: "datetime-local" as const,
+        required: true
+      },
+      {
+        id: "type",
+        label: "Type",
+        type: "select" as const,
+        required: true,
+        options: [
+          { value: "breast", label: "Breast" },
+          { value: "bottle", label: "Bottle" },
+          { value: "formula", label: "Formula" }
+        ]
+      },
+      {
+        id: "amount",
+        label: "Amount (ml)",
+        type: "number" as const
+      },
+      {
+        id: "notes",
+        label: "Notes",
+        type: "textarea" as const,
+        placeholder: "Add any additional notes..."
+      }
+    ]
+  },
+  sleep: {
+    title: "Sleep",
+    fields: [
+      {
+        id: "timestamp",
+        label: "When",
+        type: "datetime-local" as const,
+        required: true
+      },
+      {
+        id: "type",
+        label: "Type",
+        type: "select" as const,
+        required: true,
+        options: [
+          { value: "nap", label: "Nap" },
+          { value: "night", label: "Night Sleep" }
+        ]
+      },
+      {
+        id: "quality",
+        label: "Quality",
+        type: "select" as const,
+        required: false,
+        options: [
+          { value: "1", label: "★" },
+          { value: "2", label: "★★" },
+          { value: "3", label: "★★★" },
+          { value: "4", label: "★★★★" },
+          { value: "5", label: "★★★★★" }
+        ]
+      },
+      {
+        id: "notes",
+        label: "Notes",
+        type: "textarea" as const,
+        placeholder: "Add any additional notes..."
+      }
+    ]
+  }
+};
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const userId = await requireUserId(request);
@@ -17,240 +127,64 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   
   if (!isAuthorized) return redirect("/dashboard");
 
-  const validTypes = ['elimination', 'feeding', 'sleep'];
-  if (!params.type || !validTypes.includes(params.type)) {
+  const type = params.type as TrackingType;
+  if (!trackingConfigs[type]) {
     return redirect(`/baby/${params.id}`);
   }
 
-  return json({ baby });
+  return json({ baby, trackingConfig: trackingConfigs[type] });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const type = params.type as TrackingType;
+  const babyId = Number(params.id);
   
-  const type = formData.get("type") as string;
+  const baseData = {
+    babyId,
+    type: formData.get("type") as string,
+    notes: formData.get("notes") as string | null,
+  };
+
   const timestamp = new Date(formData.get("timestamp") as string);
-  const notes = formData.get("notes") as string | null;
-  
-  switch (params.type) {
-    case "elimination":
+
+  switch (type) {
+    case 'elimination':
       await trackElimination({
-        babyId: Number(params.id),
-        type,
+        ...baseData,
         timestamp,
         weight: formData.get("weight") ? Number(formData.get("weight")) : null,
-        notes,
       });
       break;
-    
-    case "feeding":
+    case 'feeding':
       await trackFeeding({
-        babyId: Number(params.id),
-        type,
+        ...baseData,
         startTime: timestamp,
         amount: formData.get("amount") ? Number(formData.get("amount")) : null,
-        notes,
       });
       break;
-    
-    case "sleep":
+    case 'sleep':
       await trackSleep({
-        babyId: Number(params.id),
-        type,
+        ...baseData,
         startTime: timestamp,
         quality: formData.get("quality") ? Number(formData.get("quality")) : null,
-        notes,
       });
       break;
+    default:
+      throw new Error(`Invalid tracking type: ${type}`);
   }
 
   return redirect(`/baby/${params.id}`);
 }
 
-const inputClasses = "w-full p-2 border rounded bg-gray-900 text-white";
-const labelClasses = "block text-sm font-medium mb-1 text-white";
-
-export default function TrackEventModal() {
-  const navigate = useNavigate();
-  const params = useParams();
+export default function TrackEvent() {
+  const { baby, trackingConfig } = useLoaderData<typeof loader>();
   
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        navigate(`/baby/${params.id}`);
-      }
-    };
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [navigate, params.id]);
-
-  const renderForm = () => {
-    switch (params.type) {
-      case "elimination":
-        return (
-          <>
-            <div className="mb-4">
-              <label htmlFor="elimination-type" className={labelClasses}>Type</label>
-              <select
-                id="elimination-type"
-                name="type"
-                className={inputClasses}
-                required
-              >
-                <option value="wet">Wet</option>
-                <option value="dirty">Dirty</option>
-                <option value="both">Both</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="elimination-weight" className={labelClasses}>Weight (g)</label>
-              <input
-                id="elimination-weight"
-                type="number"
-                name="weight"
-                className={inputClasses}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="elimination-notes" className={labelClasses}>Notes</label>
-              <textarea
-                id="elimination-notes"
-                name="notes"
-                className={inputClasses}
-                rows={3}
-                placeholder="Add any additional notes..."
-              />
-            </div>
-          </>
-        );
-      
-      case "feeding":
-        return (
-          <>
-            <div className="mb-4">
-              <label htmlFor="feeding-type" className={labelClasses}>Type</label>
-              <select
-                id="feeding-type"
-                name="type"
-                className={inputClasses}
-                required
-              >
-                <option value="breast">Breast</option>
-                <option value="bottle">Bottle</option>
-                <option value="formula">Formula</option>
-                <option value="solid">Solid Food</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="feeding-amount" className={labelClasses}>Amount (ml)</label>
-              <input
-                id="feeding-amount"
-                type="number"
-                name="amount"
-                className={inputClasses}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="feeding-notes" className={labelClasses}>Notes</label>
-              <textarea
-                id="feeding-notes"
-                name="notes"
-                className={inputClasses}
-                rows={3}
-                placeholder="Add any additional notes..."
-              />
-            </div>
-          </>
-        );
-      
-      case "sleep":
-        return (
-          <>
-            <div className="mb-4">
-              <label htmlFor="sleep-type" className={labelClasses}>Type</label>
-              <select
-                id="sleep-type"
-                name="type"
-                className={inputClasses}
-                required
-              >
-                <option value="nap">Nap</option>
-                <option value="night">Night Sleep</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="sleep-quality" className={labelClasses}>Quality (1-5)</label>
-              <input
-                id="sleep-quality"
-                type="number"
-                name="quality"
-                min="1"
-                max="5"
-                className={inputClasses}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="sleep-notes" className={labelClasses}>Notes</label>
-              <textarea
-                id="sleep-notes"
-                name="notes"
-                className={inputClasses}
-                rows={3}
-                placeholder="Add any additional notes..."
-              />
-            </div>
-          </>
-        );
-    }
-  };
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold capitalize text-bla-900">
-            Track {params.type}
-          </h2>
-          <button
-            onClick={() => navigate(`/baby/${params.id}`)}
-            className="p-1 hover:bg-gray-100 rounded-full"
-          >
-            <XIcon className="w-5 h-5" />
-          </button>
-        </div>
-        
-        <Form method="post">
-          <div className="mb-4">
-            <label htmlFor="event-timestamp" className={labelClasses}>When</label>
-            <input
-              id="event-timestamp"
-              type="datetime-local"
-              name="timestamp"
-              defaultValue={new Date().toISOString().slice(0, 16)}
-              className={inputClasses}
-              required
-            />
-          </div>
-          
-          {renderForm()}
-          
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              onClick={() => navigate(`/baby/${params.id}`)}
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Save
-            </button>
-          </div>
-        </Form>
-      </div>
-    </div>
+    <TrackingModal 
+      babyId={baby.id}
+      title={trackingConfig.title}
+      fields={trackingConfig.fields}
+    />
   );
 }
