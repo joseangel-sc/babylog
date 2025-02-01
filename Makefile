@@ -1,4 +1,4 @@
-.PHONY: install start stop clean db-start db-stop db-restart db-logs migrate-dev migrate-reset studio help
+.PHONY: install start stop clean db-start db-stop db-restart db-logs migrate-dev migrate-reset studio help prisma-generate seed
 
 # Colors for prettier output
 YELLOW=\033[1;33m
@@ -13,9 +13,10 @@ help: ## Show this help
 
 install: ## Install all dependencies
 	npm install
+	@make prisma-generate
 
 start: ## Start the Remix development server
-	npm run dev
+	npm run dev -- --host
 
 stop: ## Stop the Remix development server (if running)
 	pkill -f "remix dev" || true
@@ -56,16 +57,16 @@ init-db: ## Initialize database with first migration
 		npx prisma migrate dev; \
 	fi
 
-dev: db-start ## Start everything for development
+dev: db-start prisma-generate ## Start everything for development
 	@make init-db
 	@make start
 
 reset-all: ## Reset everything - database, migrations, and node modules
 	make db-clean
 	rm -rf node_modules
-	make install
-	make db-start
-	make migrate-dev
+	@make install
+	@make db-start
+	@make migrate-dev
 
 lint: ## Run linter
 	npm run lint || true
@@ -75,3 +76,14 @@ format: ## Format code with Prettier
 
 test: ## Run vitest 
 	npm run test 
+
+prisma-generate: ## Generate Prisma types
+	@if [ ! -d "node_modules/.prisma/client" ]; then \
+		echo "Generating Prisma client..." && \
+		npx prisma generate; \
+	else \
+		echo "Prisma client already exists"; \
+	fi
+
+seed: ## Seed the database with test data
+	npx prisma db seed

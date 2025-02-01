@@ -2,6 +2,7 @@ import { Link, useLoaderData, Form } from '@remix-run/react';
 import { requireUserId, logout } from "~/.server/session";
 import { getUserBabies } from "~/.server/baby";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import type { Baby } from "@prisma/client";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await requireUserId(request);
@@ -45,7 +46,7 @@ export default function Dashboard() {
         <p className="text-gray-600">No babies added yet.</p>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
-          {babies.map((baby) => (
+          {babies.map((baby: Baby) => (
             <Link
               key={baby.id}
               to={`/baby/${baby.id}`}
