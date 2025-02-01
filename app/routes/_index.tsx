@@ -3,7 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { useActionData, Form } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { createUserSession, getUserId } from "~/.server/session";
-import { verifyLogin } from "~/.server/user"
+import { verifyLogin } from "~/.server/user";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
@@ -77,6 +77,13 @@ export default function Login() {
           Login
         </button>
       </Form>
+
+      <div className="mt-4 text-center">
+        <span className="text-gray-300">Don't have an account? </span>
+        <a href="/register" className="text-blue-400 hover:text-blue-300">
+          Sign up
+        </a>
+      </div>
     </div>
   );
 }
