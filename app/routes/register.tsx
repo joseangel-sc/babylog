@@ -2,8 +2,6 @@ import { type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { createUser } from "~/.server/user";
 import { createUserSession } from "~/.server/session";
-import { Prisma } from "@prisma/client";
-
 
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -38,26 +36,19 @@ export async function action({ request }: ActionFunctionArgs) {
         });
         return createUserSession(user.id, "/");
     } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (typeof error === 'object' && error !== null && (error as {code?: string}).code === "P2002") {
-                return new Response(JSON.stringify({ error: "An account with this email already exists" }), {
-                    status: 400,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-            }
+        if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
+            return new Response(JSON.stringify({ error: "An account with this email already exists" }), {
+                status: 400,
+                headers: { "Content-Type": "application/json" },
+            });
         }
         console.error("Registration error:", error);
         return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
             status: 500,
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
         });
     }
 }
-
 
 export default function Register() {
     const actionData = useActionData<typeof action>();
