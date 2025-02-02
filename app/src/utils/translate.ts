@@ -1,4 +1,5 @@
 import { en } from '../translations/en';
+import { es } from '../translations/es';
 
 type NestedKeyOf<ObjectType extends object> = {
   [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
@@ -8,10 +9,13 @@ type NestedKeyOf<ObjectType extends object> = {
 
 export type TranslationKey = NestedKeyOf<typeof en>;
 
-let currentLanguage = 'en';
+let currentLanguage = localStorage.getItem('language') || 'en';
 const translations: { [key: string]: typeof en } = {
   en,
+  es,
 };
+
+export const getCurrentLanguage = () => currentLanguage;
 
 export const t = (key: TranslationKey, params?: Record<string, string>): string => {
   const keys = key.split('.');
@@ -34,6 +38,7 @@ export const t = (key: TranslationKey, params?: Record<string, string>): string 
 export const setLanguage = (lang: string) => {
   if (translations[lang]) {
     currentLanguage = lang;
+    localStorage.setItem('language', lang);
   } else {
     console.warn(`Language ${lang} not loaded`);
   }
