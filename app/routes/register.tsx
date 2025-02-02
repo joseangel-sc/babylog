@@ -2,6 +2,7 @@ import { type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { createUser } from "~/.server/user";
 import { createUserSession } from "~/.server/session";
+import { t } from '~/src/utils/translate';
 
 export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -18,7 +19,7 @@ export async function action({ request }: ActionFunctionArgs) {
         typeof lastName !== "string" ||
         (phone && typeof phone !== "string")
     ) {
-        return new Response(JSON.stringify({ error: "Please fill in all required fields" }), {
+        return new Response(JSON.stringify({ error: t('register.errors.requiredFields') }), {
             status: 400,
             headers: {
                 "Content-Type": "application/json",
@@ -37,13 +38,13 @@ export async function action({ request }: ActionFunctionArgs) {
         return createUserSession(user.id, "/");
     } catch (error) {
         if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
-            return new Response(JSON.stringify({ error: "An account with this email already exists" }), {
+            return new Response(JSON.stringify({ error: t('register.errors.emailExists') }), {
                 status: 400,
                 headers: { "Content-Type": "application/json" },
             });
         }
         console.error("Registration error:", error);
-        return new Response(JSON.stringify({ error: "Something went wrong. Please try again." }), {
+        return new Response(JSON.stringify({ error: t('register.errors.generic') }), {
             status: 500,
             headers: { "Content-Type": "application/json" },
         });
@@ -57,7 +58,7 @@ export default function Register() {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow">
                 <h2 className="text-center text-3xl font-bold text-gray-900">
-                    Create your account
+                    {t('register.title')}
                 </h2>
                 <Form method="post" className="mt-8 space-y-6">
                     {actionData?.error && (
@@ -68,7 +69,7 @@ export default function Register() {
                     <div className="space-y-4">
                         <div className="space-y-1">
                             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                                First Name
+                                {t('register.fields.firstName')}
                             </label>
                             <input
                                 id="firstName"
@@ -77,12 +78,12 @@ export default function Register() {
                                 autoComplete="given-name"
                                 required
                                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Enter your first name"
+                                placeholder={t('register.placeholders.firstName')}
                             />
                         </div>
                         <div className="space-y-1">
                             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                                Last Name
+                                {t('register.fields.lastName')}
                             </label>
                             <input
                                 id="lastName"
@@ -91,12 +92,12 @@ export default function Register() {
                                 autoComplete="family-name"
                                 required
                                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Enter your last name"
+                                placeholder={t('register.placeholders.lastName')}
                             />
                         </div>
                         <div className="space-y-1">
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                Email address
+                                {t('register.fields.email')}
                             </label>
                             <input
                                 id="email"
@@ -105,12 +106,12 @@ export default function Register() {
                                 autoComplete="email"
                                 required
                                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Enter your email"
+                                placeholder={t('register.placeholders.email')}
                             />
                         </div>
                         <div className="space-y-1">
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                Password
+                                {t('register.fields.password')}
                             </label>
                             <input
                                 id="password"
@@ -119,12 +120,12 @@ export default function Register() {
                                 autoComplete="new-password"
                                 required
                                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Enter your password"
+                                placeholder={t('register.placeholders.password')}
                             />
                         </div>
                         <div className="space-y-1">
                             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                                Phone <span className="text-gray-400">(optional)</span>
+                                {t('register.fields.phone')} <span className="text-gray-400">{t('register.fields.optional')}</span>
                             </label>
                             <input
                                 id="phone"
@@ -132,7 +133,7 @@ export default function Register() {
                                 type="tel"
                                 autoComplete="tel"
                                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="Enter your phone number"
+                                placeholder={t('register.placeholders.phone')}
                             />
                         </div>
                     </div>
@@ -142,7 +143,7 @@ export default function Register() {
                             type="submit"
                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                            Sign up
+                            {t('register.submit')}
                         </button>
                     </div>
                 </Form>

@@ -59,6 +59,66 @@ export const en = {
       }
     }
   },
+  baby: {
+    settings: 'Settings',
+    recent: {
+      eliminations: 'Recent Eliminations',
+      feedings: 'Recent Feedings',
+      sleep: 'Recent Sleep',
+      viewAll: 'View All',
+      noData: {
+        eliminations: 'No eliminations recorded',
+        feedings: 'No feedings recorded',
+        sleep: 'No sleep sessions recorded'
+      }
+    },
+    details: {
+      weight: 'Weight',
+      amount: 'Amount',
+      quality: 'Quality'
+    }
+  },
+  newBaby: {
+    title: 'Add New Baby',
+    fields: {
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      dateOfBirth: 'Date of Birth',
+      gender: 'Gender'
+    },
+    genderOptions: {
+      girl: 'Girl',
+      boy: 'Boy'
+    },
+    submit: 'Add Baby',
+    errors: {
+      allFieldsRequired: 'All fields are required'
+    }
+  },
+  register: {
+    title: 'Create your account',
+    fields: {
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      email: 'Email address',
+      password: 'Password',
+      phone: 'Phone',
+      optional: '(optional)'
+    },
+    placeholders: {
+      firstName: 'Enter your first name',
+      lastName: 'Enter your last name',
+      email: 'Enter your email',
+      password: 'Enter your password',
+      phone: 'Enter your phone number'
+    },
+    submit: 'Sign up',
+    errors: {
+      requiredFields: 'Please fill in all required fields',
+      emailExists: 'An account with this email already exists',
+      generic: 'Something went wrong. Please try again.'
+    }
+  },
   // Add more translation categories as needed
 };
 

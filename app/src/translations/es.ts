@@ -61,5 +61,65 @@ export const es: TranslationKeys = {
       }
     }
   },
+  baby: {
+    settings: 'Configuración',
+    recent: {
+      eliminations: 'Eliminaciones Recientes',
+      feedings: 'Alimentaciones Recientes',
+      sleep: 'Sueño Reciente',
+      viewAll: 'Ver Todo',
+      noData: {
+        eliminations: 'No hay eliminaciones registradas',
+        feedings: 'No hay alimentaciones registradas',
+        sleep: 'No hay sesiones de sueño registradas'
+      }
+    },
+    details: {
+      weight: 'Peso',
+      amount: 'Cantidad',
+      quality: 'Calidad'
+    }
+  },
+  newBaby: {
+    title: 'Agregar Nuevo Bebé',
+    fields: {
+      firstName: 'Nombre',
+      lastName: 'Apellido',
+      dateOfBirth: 'Fecha de Nacimiento',
+      gender: 'Género'
+    },
+    genderOptions: {
+      girl: 'Niña',
+      boy: 'Niño'
+    },
+    submit: 'Agregar Bebé',
+    errors: {
+      allFieldsRequired: 'Todos los campos son requeridos'
+    }
+  },
+  register: {
+    title: 'Crear tu cuenta',
+    fields: {
+      firstName: 'Nombre',
+      lastName: 'Apellido',
+      email: 'Correo electrónico',
+      password: 'Contraseña',
+      phone: 'Teléfono',
+      optional: '(opcional)'
+    },
+    placeholders: {
+      firstName: 'Ingresa tu nombre',
+      lastName: 'Ingresa tu apellido',
+      email: 'Ingresa tu correo electrónico',
+      password: 'Ingresa tu contraseña',
+      phone: 'Ingresa tu número de teléfono'
+    },
+    submit: 'Registrarse',
+    errors: {
+      requiredFields: 'Por favor completa todos los campos requeridos',
+      emailExists: 'Ya existe una cuenta con este correo electrónico',
+      generic: 'Algo salió mal. Por favor intenta de nuevo.'
+    }
+  },
   // Add more translation categories as needed
 }; 
