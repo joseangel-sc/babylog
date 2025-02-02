@@ -9,7 +9,13 @@ type NestedKeyOf<ObjectType extends object> = {
 
 export type TranslationKey = NestedKeyOf<typeof en>;
 
-let currentLanguage = localStorage.getItem('language') || 'en';
+const isBrowser = typeof window !== 'undefined';
+
+let currentLanguage = 'en';
+if (isBrowser) {
+  currentLanguage = localStorage.getItem('language') || 'en';
+}
+
 const translations: { [key: string]: typeof en } = {
   en,
   es,
@@ -38,7 +44,9 @@ export const t = (key: TranslationKey, params?: Record<string, string>): string 
 export const setLanguage = (lang: string) => {
   if (translations[lang]) {
     currentLanguage = lang;
-    localStorage.setItem('language', lang);
+    if (isBrowser) {
+      localStorage.setItem('language', lang);
+    }
   } else {
     console.warn(`Language ${lang} not loaded`);
   }
