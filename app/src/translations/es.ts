@@ -29,5 +29,37 @@ export const es: TranslationKeys = {
     addBaby: 'Agregar Bebé',
     noBabies: 'Aún no hay bebés agregados.',
   },
+  tracking: {
+    when: 'Cuándo',
+    type: 'Tipo',
+    notes: 'Notas',
+    notesPlaceholder: 'Agregar notas adicionales...',
+    elimination: {
+      title: 'Eliminación',
+      weight: 'Peso (g)',
+      types: {
+        wet: 'Mojado',
+        dirty: 'Sucio',
+        both: 'Ambos'
+      }
+    },
+    feeding: {
+      title: 'Alimentación',
+      amount: 'Cantidad (ml)',
+      types: {
+        breast: 'Pecho',
+        bottle: 'Biberón',
+        formula: 'Fórmula'
+      }
+    },
+    sleep: {
+      title: 'Sueño',
+      quality: 'Calidad',
+      types: {
+        nap: 'Siesta',
+        night: 'Sueño Nocturno'
+      }
+    }
+  },
   // Add more translation categories as needed
 }; 
