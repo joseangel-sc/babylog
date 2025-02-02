@@ -4,6 +4,7 @@ import { useActionData, Form } from "@remix-run/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { createUserSession, getUserId } from "~/.server/session";
 import { verifyLogin } from "~/.server/user";
+import { t } from '~/src/utils/translate';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
@@ -17,12 +18,12 @@ export async function action({ request }: ActionFunctionArgs) {
   const password = formData.get("password");
 
   if (!email || !password) {
-    return json({ error: "Email and password are required" }, { status: 400 });
+    return json({ error: t('auth.errors.credentialsRequired') }, { status: 400 });
   }
 
   const user = await verifyLogin(email.toString(), password.toString());
   if (!user) {
-    return json({ error: "Invalid credentials" }, { status: 400 });
+    return json({ error: t('auth.errors.invalidCredentials') }, { status: 400 });
   }
 
   return createUserSession(user.id, "/dashboard");
@@ -36,7 +37,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Form method="post" className="w-full max-w-md p-6">
-        <h1 className="text-2xl font-bold mb-6">Login</h1>
+        <h1 className="text-2xl font-bold mb-6">{t('auth.loginTitle')}</h1>
 
         {actionData?.error && (
           <div className="text-red-600 mb-4">{actionData.error}</div>
@@ -44,7 +45,7 @@ export default function Login() {
 
         <div className="mb-4">
           <label htmlFor="email" className="block mb-2">
-            Email
+            {t('auth.emailLabel')}
           </label>
           <input
             id="email"
@@ -58,7 +59,7 @@ export default function Login() {
 
         <div className="mb-4">
           <label htmlFor="password" className="block mb-2">
-            Password
+            {t('auth.passwordLabel')}
           </label>
           <input
             id="password"
@@ -74,7 +75,7 @@ export default function Login() {
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
         >
-          Login
+          {t('auth.loginButton')}
         </button>
       </Form>
 
