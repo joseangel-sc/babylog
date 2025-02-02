@@ -4,98 +4,99 @@ import { getBaby } from "~/.server/baby";
 import { requireUserId } from "~/.server/session";
 import { trackElimination, trackFeeding, trackSleep } from "~/.server/tracking";
 import { TrackingModal } from "~/components/tracking/TrackingModal";
+import { t } from '~/src/utils/translate';
 
 type TrackingType = 'elimination' | 'feeding' | 'sleep';
 
 const trackingConfigs = {
   elimination: {
-    title: "Elimination",
+    title: t('tracking.elimination.title'),
     fields: [
       {
         id: "timestamp",
-        label: "When",
+        label: t('tracking.when'),
         type: "datetime-local" as const,
         required: true
       },
       {
         id: "type",
-        label: "Type",
+        label: t('tracking.type'),
         type: "select" as const,
         required: true,
         options: [
-          { value: "wet", label: "Wet" },
-          { value: "dirty", label: "Dirty" },
-          { value: "both", label: "Both" }
+          { value: "wet", label: t('tracking.elimination.types.wet') },
+          { value: "dirty", label: t('tracking.elimination.types.dirty') },
+          { value: "both", label: t('tracking.elimination.types.both') }
         ]
       },
       {
         id: "weight",
-        label: "Weight (g)",
+        label: t('tracking.elimination.weight'),
         type: "number" as const
       },
       {
         id: "notes",
-        label: "Notes",
+        label: t('tracking.notes'),
         type: "textarea" as const,
-        placeholder: "Add any additional notes..."
+        placeholder: t('tracking.notesPlaceholder')
       }
     ]
   },
   feeding: {
-    title: "Feeding",
+    title: t('tracking.feeding.title'),
     fields: [
       {
         id: "timestamp",
-        label: "When",
+        label: t('tracking.when'),
         type: "datetime-local" as const,
         required: true
       },
       {
         id: "type",
-        label: "Type",
+        label: t('tracking.type'),
         type: "select" as const,
         required: true,
         options: [
-          { value: "breast", label: "Breast" },
-          { value: "bottle", label: "Bottle" },
-          { value: "formula", label: "Formula" }
+          { value: "breast", label: t('tracking.feeding.types.breast') },
+          { value: "bottle", label: t('tracking.feeding.types.bottle') },
+          { value: "formula", label: t('tracking.feeding.types.formula') }
         ]
       },
       {
         id: "amount",
-        label: "Amount (ml)",
+        label: t('tracking.feeding.amount'),
         type: "number" as const
       },
       {
         id: "notes",
-        label: "Notes",
+        label: t('tracking.notes'),
         type: "textarea" as const,
-        placeholder: "Add any additional notes..."
+        placeholder: t('tracking.notesPlaceholder')
       }
     ]
   },
   sleep: {
-    title: "Sleep",
+    title: t('tracking.sleep.title'),
     fields: [
       {
         id: "timestamp",
-        label: "When",
+        label: t('tracking.when'),
         type: "datetime-local" as const,
         required: true
       },
       {
         id: "type",
-        label: "Type",
+        label: t('tracking.type'),
         type: "select" as const,
         required: true,
         options: [
-          { value: "nap", label: "Nap" },
-          { value: "night", label: "Night Sleep" }
+          { value: "nap", label: t('tracking.sleep.types.nap') },
+          { value: "night", label: t('tracking.sleep.types.night') }
         ]
       },
       {
         id: "quality",
-        label: "Quality",
+        label: t('tracking.sleep.quality'),
         type: "select" as const,
         required: false,
         options: [
@@ -108,9 +109,9 @@ const trackingConfigs = {
       },
       {
         id: "notes",
-        label: "Notes",
+        label: t('tracking.notes'),
         type: "textarea" as const,
-        placeholder: "Add any additional notes..."
+        placeholder: t('tracking.notesPlaceholder')
       }
     ]
   }
