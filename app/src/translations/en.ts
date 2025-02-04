@@ -127,6 +127,9 @@ export const en = {
     },
     close: 'close'
   },
+  settings: {
+    language: "Language"
+  },
   // Add more translation categories as needed
 };
 
