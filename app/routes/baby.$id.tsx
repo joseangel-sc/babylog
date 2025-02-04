@@ -28,29 +28,55 @@ interface Feeding {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const userId = await requireUserId(request);
-  const baby = await getBaby(Number(params.id));
-  
+  const baby = await getBaby(Number(params.id), {
+    include: {
+      caregivers: {
+        include: {
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
   if (!baby) return redirect("/dashboard");
-  const isAuthorized = baby.ownerId === Number(userId) || 
-    baby.caregivers.some((c: { userId: number }) => c.userId === Number(userId));
+
+  const isAuthorized =
+    baby.ownerId === userId || baby.caregivers.some((c) => c.userId === userId);
   
   if (!isAuthorized) return redirect("/dashboard");
 
-  // Replace the direct DB calls with our new function
-  const { eliminations, feedings, sleepSessions } = await getRecentTrackingEvents(baby.id);
-  
+  const { eliminations, feedings, sleepSessions } =
+    await getRecentTrackingEvents(baby.id);
+
   return { baby, eliminations, feedings, sleepSessions };
 }
 
 export default function BabyDetails() {
-  const { baby, eliminations, feedings, sleepSessions } = useLoaderData<typeof loader>();
+  const { baby, eliminations, feedings, sleepSessions } =
+    useLoaderData<typeof loader>();
+
+  const caregivers = baby.caregivers
+    .map((c) => `${c.user.firstName} ${c.user.lastName}`)
+    .join(", ");
 
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">
-          {baby.firstName} {baby.lastName}
-        </h1>
+        <div>
+          <div className="text-2xl font-bold flex items-center gap-2">
+            <span>
+              {baby.firstName} {baby.lastName}
+            </span>
+            <span className="text-lg font-normal text-gray-600">
+              Caregivers: {caregivers}
+            </span>
+          </div>
+        </div>
         <div>
           <Link
             to={`/baby/${baby.id}/settings`}
@@ -74,7 +100,7 @@ export default function BabyDetails() {
               >
                 <PlusIcon className="w-5 h-5 text-gray-600" />
               </Link>
-              <Link 
+              <Link
                 to={`/baby/${baby.id}/eliminations`}
                 className="text-blue-500 hover:underline"
               >
@@ -117,7 +143,7 @@ export default function BabyDetails() {
               >
                 <PlusIcon className="w-5 h-5 text-gray-600" />
               </Link>
-              <Link 
+              <Link
                 to={`/baby/${baby.id}/feedings`}
                 className="text-blue-500 hover:underline"
               >
@@ -160,7 +186,7 @@ export default function BabyDetails() {
               >
                 <PlusIcon className="w-5 h-5 text-gray-600" />
               </Link>
-              <Link 
+              <Link
                 to={`/baby/${baby.id}/sleep`}
                 className="text-blue-500 hover:underline"
               >
