@@ -121,9 +121,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const baby = await getBaby(Number(params.id));
   
   if (!baby) return redirect("/dashboard");
-  
   const isAuthorized = baby.ownerId === userId || 
-    baby.caregivers.some(c => c.userId === userId);
+    baby.caregivers.some((c: { userId: number }) => c.userId === userId);
   
   if (!isAuthorized) return redirect("/dashboard");
 

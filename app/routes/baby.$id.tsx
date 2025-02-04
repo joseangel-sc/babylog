@@ -47,7 +47,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const isAuthorized =
     baby.ownerId === userId || baby.caregivers.some((c) => c.userId === userId);
-
+  
   if (!isAuthorized) return redirect("/dashboard");
 
   const { eliminations, feedings, sleepSessions } =
