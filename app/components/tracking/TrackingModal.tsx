@@ -1,6 +1,7 @@
 import { Form, useNavigate } from "@remix-run/react";
 import { XIcon } from "lucide-react";
 import { useEffect } from "react";
+import { t } from '~/src/utils/translate';
 
 interface Field {
   id: string;
@@ -80,12 +81,12 @@ export function TrackingModal({ babyId, title, fields }: TrackingModalProps) {
       <div className="bg-gray-900 rounded-lg max-w-md w-full p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-white">
-            Track {title}
+            {t('modal.track')} {title}
           </h2>
           <button
             onClick={() => navigate(`/baby/${babyId}`)}
             className="p-1 hover:bg-gray-800 rounded-full text-white"
-            aria-label="close"
+            aria-label={t('modal.close')}
           >
             <XIcon className="w-5 h-5" />
           </button>
@@ -107,13 +108,13 @@ export function TrackingModal({ babyId, title, fields }: TrackingModalProps) {
               onClick={() => navigate(`/baby/${babyId}`)}
               className="px-4 py-2 text-gray-300 hover:bg-gray-800 rounded"
             >
-              Cancel
+              {t('modal.actions.cancel')}
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
-              Save
+              {t('modal.actions.save')}
             </button>
           </div>
         </Form>

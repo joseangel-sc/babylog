@@ -119,6 +119,14 @@ export const en = {
       generic: 'Something went wrong. Please try again.'
     }
   },
+  modal: {
+    track: 'Track',
+    actions: {
+      cancel: 'Cancel',
+      save: 'Save'
+    },
+    close: 'close'
+  },
   // Add more translation categories as needed
 };
 
