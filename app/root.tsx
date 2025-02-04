@@ -53,8 +53,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <nav className="bg-gray-800 text-white p-4">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <LanguageSelector />
+          <div className="max-w-7xl mx-auto">
+            {/* Empty nav for now */}
           </div>
         </nav>
         {children}

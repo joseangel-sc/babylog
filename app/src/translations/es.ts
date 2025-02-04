@@ -129,5 +129,8 @@ export const es: TranslationKeys = {
     },
     close: 'cerrar'
   },
+  settings: {
+    language: "Idioma"
+  },
   // Add more translation categories as needed
 }; 

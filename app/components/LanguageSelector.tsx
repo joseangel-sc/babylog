@@ -16,10 +16,10 @@ export function LanguageSelector() {
     <select 
       onChange={handleChange} 
       defaultValue={getCurrentLanguage()}
-      className="bg-transparent border border-gray-300 rounded px-2 py-1 text-sm"
+      className="bg-gray-800 text-white border border-gray-600 rounded px-2 py-1 text-sm"
     >
       {languages.map(lang => (
-        <option key={lang.code} value={lang.code}>
+        <option key={lang.code} value={lang.code} className="bg-gray-800 text-white">
           {lang.name}
         </option>
       ))}

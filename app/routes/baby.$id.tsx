@@ -5,6 +5,7 @@ import { requireUserId } from "~/.server/session";
 import { getRecentTrackingEvents } from "~/.server/tracking";
 import { PlusIcon } from "lucide-react";
 import { t } from '~/src/utils/translate';
+import { LanguageSelector } from "~/components/LanguageSelector";
 
 interface Elimination {
   id: number;
@@ -68,23 +69,12 @@ export default function BabyDetails() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <div>
-          <div className="text-2xl font-bold flex items-center gap-2">
-            <span>
-              {baby.firstName} {baby.lastName}
-            </span>
-            <span className="text-lg font-normal text-gray-600">
-              Caregivers: {caregivers}
-            </span>
-          </div>
-        </div>
-        <div>
-          <Link
-            to={`/baby/${baby.id}/settings`}
-            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-          >
-            {t('baby.settings')}
-          </Link>
+        <h1 className="text-2xl font-bold">
+          {baby.firstName} {baby.lastName}
+        </h1>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-300">{t('settings.language')}:</span>
+          <LanguageSelector />
         </div>
       </div>
 
