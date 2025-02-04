@@ -9,21 +9,32 @@ export async function createBaby(
         data: {
             ...data,
             ownerId,
+            caregivers: {
+                create: {
+                    userId: ownerId,
+                    relationship: "PARENT"
+                }
+            }
         },
+        include: {
+            caregivers: {
+                include: {
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                }
+            }
+        }
     });
 }
 
-export async function getBaby(id: number) {
+export async function getBaby(id: number, options: Partial<Parameters<typeof db.baby.findUnique>[0]> = {}) {
     return db.baby.findUnique({
         where: { id },
-        include: {
-            owner: true,
-            caregivers: {
-                include: {
-                    user: true,
-                },
-            },
-        },
+        ...options,
     });
 }
 

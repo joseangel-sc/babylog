@@ -4,6 +4,30 @@ import { vi } from "vitest";
 vi.mock("@remix-run/react", () => ({
   useActionData: vi.fn(),
   Form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
+  useNavigate: () => vi.fn(),
+  useSubmit: () => vi.fn(),
+  useLoaderData: vi.fn(),
+  useDataRouterState: () => ({
+    navigation: {
+      state: "idle",
+      location: undefined,
+      formMethod: undefined,
+      formAction: undefined,
+      formEncType: undefined,
+      formData: undefined,
+    },
+    location: { pathname: "/" },
+    loaderData: {},
+    actionData: null,
+    errors: null,
+  }),
+  useNavigation: () => ({
+    state: "idle",
+    formData: null,
+    location: undefined,
+  }),
+  useLocation: () => ({ pathname: "/" }),
+  useMatches: () => [],
 }));
 
 vi.mock("~/.server/session", () => ({
