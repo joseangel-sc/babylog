@@ -27,9 +27,24 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const acceptLanguage = request.headers.get("accept-language");
+  const preferredLanguage = acceptLanguage?.split(',')[0].split('-')[0] || 'en';
+  const supportedLanguage = ['en', 'es'].includes(preferredLanguage) ? preferredLanguage : 'en';
+  
+  return { language: supportedLanguage };
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { language } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    setLanguage(savedLanguage || language);
+  }, [language]);
+
   return (
-    <html lang="en">
+    <html lang={getCurrentLanguage()}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,21 +66,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const acceptLanguage = request.headers.get("accept-language");
-  const preferredLanguage = acceptLanguage?.split(',')[0].split('-')[0] || 'en';
-  const supportedLanguage = ['en', 'es'].includes(preferredLanguage) ? preferredLanguage : 'en';
-  
-  return { language: supportedLanguage };
-}
-
 export default function App() {
-  const { language } = useLoaderData<typeof loader>();
-  
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('language');
-    setLanguage(savedLanguage || language);
-  }, [language]);
-
   return <Outlet />;
 }

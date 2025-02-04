@@ -121,5 +121,13 @@ export const es: TranslationKeys = {
       generic: 'Algo salió mal. Por favor intenta de nuevo.'
     }
   },
+  modal: {
+    track: 'Registrar',
+    actions: {
+      cancel: 'Cancelar',
+      save: 'Guardar'
+    },
+    close: 'cerrar'
+  },
   // Add more translation categories as needed
 }; 

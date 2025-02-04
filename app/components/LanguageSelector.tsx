@@ -9,7 +9,6 @@ const languages = [
 export function LanguageSelector() {
   const handleChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setLanguage(e.target.value);
-    // Force reload to update all translations
     window.location.reload();
   }, []);
 
