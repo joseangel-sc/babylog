@@ -22,7 +22,8 @@ export const es: TranslationKeys = {
     errors: {
       credentialsRequired: 'El correo electrónico y la contraseña son requeridos',
       invalidCredentials: 'Credenciales inválidas'
-    }
+    },
+    signupPrompt: "¿No tienes una cuenta?"
   },
   dashboard: {
     title: 'Mis Bebés',

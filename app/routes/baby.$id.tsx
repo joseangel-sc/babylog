@@ -28,6 +28,26 @@ interface Feeding {
   amount?: number | null;
 }
 
+interface Caregiver {
+  userId: number;
+  user: {
+    firstName: string;
+    lastName: string;
+  };
+}
+
+interface Baby {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date;
+  gender: string | null;
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  ownerId: number;
+  caregivers: Caregiver[];
+}
+
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const userId = await requireUserId(request);
   const baby = await getBaby(Number(params.id), {
@@ -48,7 +68,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!baby) return redirect("/dashboard");
 
   const isAuthorized =
-    baby.ownerId === userId || baby.caregivers.some((c) => c.userId === userId);
+    baby.ownerId === userId || (baby as Baby).caregivers.some((c: Caregiver) => c.userId === userId);
   
   if (!isAuthorized) return redirect("/dashboard");
 
@@ -62,8 +82,8 @@ export default function BabyDetails() {
   const { baby, eliminations, feedings, sleepSessions } =
     useLoaderData<typeof loader>();
 
-  const caregivers = baby.caregivers  
-    .map((c) => `${c.user.firstName} ${c.user.lastName}`)
+  const caregivers = (baby as Baby).caregivers
+    .map((c: Caregiver) => `${c.user.firstName} ${c.user.lastName}`)
     .join(", ");
 
   return (
