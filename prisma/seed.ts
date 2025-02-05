@@ -4,21 +4,37 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function seed() {
-  const testUser = await prisma.user.create({
+  const userWithBaby = await prisma.user.create({
     data: {
-      email: 'test@example.com',
+      email: 'gluron_parent@monoverse.com',
       passwordHash: await bcrypt.hash('password123', 10),
-      firstName: 'Test',
-      lastName: 'User',
+      firstName: 'Bobo',
+      lastName: 'Fuggsnucc',
+    },
+  });
+
+  const userWithoutBaby = await prisma.user.create({
+    data: {
+      email: 'skeptic@monoverse.com',
+      passwordHash: await bcrypt.hash('password123', 10),
+      firstName: 'Tiggy',
+      lastName: 'Skibbles',
     },
   });
 
   await prisma.baby.create({
     data: {
-      firstName: 'Baby',
-      lastName: 'Test',
+      firstName: 'Lil',
+      lastName: 'Fuggsnucc',
       dateOfBirth: new Date('2023-01-01'),
-      ownerId: testUser.id,
+      gender: 'unknown',
+      ownerId: userWithBaby.id,
+      caregivers: {
+        create: {
+          userId: userWithBaby.id,
+          relationship: 'PARENT',
+        },
+      },
       eliminations: {
         create: [
           {
@@ -70,4 +86,4 @@ seed()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  }); 
+  });
