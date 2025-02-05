@@ -80,9 +80,9 @@ export default function Login() {
       </Form>
 
       <div className="mt-4 text-center">
-        <span className="text-gray-300">Don't have an account? </span>
+        <span className="text-gray-300">{t('auth.signupPrompt')} </span>
         <a href="/register" className="text-blue-400 hover:text-blue-300">
-          Sign up
+          {t('auth.signup')}
         </a>
       </div>
     </div>

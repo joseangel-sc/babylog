@@ -20,7 +20,8 @@ export const en = {
     errors: {
       credentialsRequired: 'Email and password are required',
       invalidCredentials: 'Invalid credentials'
-    }
+    },
+    signupPrompt: "Don't have an account?"
   },
   dashboard: {
     title: 'My Babies',
