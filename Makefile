@@ -67,6 +67,7 @@ reset-all: ## Reset everything - database, migrations, and node modules
 	@make install
 	@make db-start
 	@make migrate-dev
+	@make seed
 
 lint: ## Run linter
 	npm run lint || true
@@ -87,3 +88,7 @@ prisma-generate: ## Generate Prisma types
 
 seed: ## Seed the database with test data
 	npx prisma db seed
+
+db-shell: 
+	docker compose exec db psql -U remix_user -d remix_db
+	

@@ -60,7 +60,7 @@ export default function BabyDetails() {
   const { baby, eliminations, feedings, sleepSessions } =
     useLoaderData<typeof loader>();
 
-  const caregivers = baby.caregivers
+  const caregivers = baby.caregivers  
     .map((c) => `${c.user.firstName} ${c.user.lastName}`)
     .join(", ");
 
