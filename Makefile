@@ -73,7 +73,7 @@ reset-all: ## Reset everything - database, migrations, and node modules
 	@make seed
 
 lint: ## Run linter
-	npm run lint || true
+	npx eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .
 
 format: ## Format code with Prettier
 	npm run format || true

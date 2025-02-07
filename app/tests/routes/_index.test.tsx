@@ -4,7 +4,8 @@ import { useActionData } from "@remix-run/react";
 // Mock setup must come before other imports
 vi.mock("@remix-run/react", () => ({
   useActionData: vi.fn(),
-  Form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
+  Form: ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => 
+    <form {...props}>{children}</form>,
   useNavigate: () => vi.fn(),
   useSubmit: () => vi.fn(),
   useLoaderData: vi.fn(),
@@ -54,8 +55,7 @@ vi.mock('~/src/utils/translate', () => ({
 // Now we can do our imports
 import { render, screen, fireEvent } from "@testing-library/react";
 import { redirect } from "@remix-run/node";
-import { action, loader } from "~/routes/_index";
-import Login from "~/routes/_index";
+import Login, { loader, action } from "~/routes/_index";
 
 describe("Login Page", () => {
   describe("loader", () => {

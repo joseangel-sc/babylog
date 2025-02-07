@@ -8,7 +8,6 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { LanguageSelector } from "~/components/LanguageSelector";
 import { getCurrentLanguage, setLanguage } from "~/src/utils/translate";
 import { useEffect } from "react";
 
