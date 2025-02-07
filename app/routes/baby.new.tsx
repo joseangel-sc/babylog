@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { requireUserId } from "~/.server/session";
@@ -7,11 +8,16 @@ import { t } from '~/src/utils/translate';
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await requireUserId(request);
   const formData = await request.formData();
-  
+
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
   const dateOfBirth = formData.get("dateOfBirth") as string;
   const gender = formData.get("gender") as string;
+
+  // Get additional parent data if provided
+  const parentFirstName = formData.get("parentFirstName") as string;
+  const parentLastName = formData.get("parentLastName") as string;
+  const parentEmail = formData.get("parentEmail") as string;
 
   if (!firstName || !lastName || !dateOfBirth) {
     return { error: t('newBaby.errors.allFieldsRequired') };
@@ -22,6 +28,13 @@ export async function action({ request }: ActionFunctionArgs) {
     lastName,
     dateOfBirth: new Date(dateOfBirth),
     gender: gender || null,
+    additionalParent: parentEmail
+      ? {
+          firstName: parentFirstName,
+          lastName: parentLastName,
+          email: parentEmail,
+        }
+      : undefined,
   });
 
   return redirect(`/baby/${baby.id}`);
@@ -29,6 +42,54 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function NewBaby() {
   const actionData = useActionData<typeof action>();
+  const [showParentModal, setShowParentModal] = useState(false);
+  const [babyData, setBabyData] = useState({
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    gender: "unknown",
+  });
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    setBabyData({
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
+      dateOfBirth: formData.get("dateOfBirth") as string,
+      gender: formData.get("gender") as string,
+    });
+    setShowParentModal(true);
+  };
+
+  const handleAddBaby = (parentData?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }) => {
+    if (!formRef.current) return;
+
+    // Create a new FormData instance
+    const formData = new FormData();
+
+    // Add baby data
+    formData.append("firstName", babyData.firstName);
+    formData.append("lastName", babyData.lastName);
+    formData.append("dateOfBirth", babyData.dateOfBirth);
+    formData.append("gender", babyData.gender);
+
+    // Add parent data if provided
+    if (parentData) {
+      formData.append("parentFirstName", parentData.firstName);
+      formData.append("parentLastName", parentData.lastName);
+      formData.append("parentEmail", parentData.email);
+    }
+
+    // Update form data and submit
+    formRef.current.submit();
+  };
 
   return (
     <div className="max-w-md mx-auto p-8">
@@ -36,9 +97,11 @@ export default function NewBaby() {
       
       <Form method="post" className="space-y-6">
         {actionData?.error && (
-          <div className="text-red-500 p-3 bg-red-50 rounded-md">{actionData.error}</div>
+          <div className="text-red-500 p-3 bg-red-50 rounded-md">
+            {actionData.error}
+          </div>
         )}
-        
+
         <div className="space-y-2">
           <label className="block text-sm font-medium">
             {t('newBaby.fields.firstName')}
