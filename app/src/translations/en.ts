@@ -62,6 +62,7 @@ export const en = {
   },
   baby: {
     settings: 'Settings',
+    caregivers: 'Caregivers',
     recent: {
       eliminations: 'Recent Eliminations',
       feedings: 'Recent Feedings',

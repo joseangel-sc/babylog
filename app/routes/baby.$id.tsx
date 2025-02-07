@@ -92,6 +92,9 @@ export default function BabyDetails() {
         <h1 className="text-2xl font-bold">
           {baby.firstName} {baby.lastName}
         </h1>
+        <span className="text-lg font-normal text-gray-600">
+          {t('baby.caregivers')}: {caregivers}
+        </span>
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-300">{t('settings.language')}:</span>
           <LanguageSelector />

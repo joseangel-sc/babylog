@@ -64,6 +64,7 @@ export const es: TranslationKeys = {
   },
   baby: {
     settings: 'Configuración',
+    caregivers: 'Cuidadores',
     recent: {
       eliminations: 'Eliminaciones Recientes',
       feedings: 'Alimentaciones Recientes',
