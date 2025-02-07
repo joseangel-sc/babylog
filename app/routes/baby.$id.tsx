@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, Link, Outlet } from "@remix-run/react";
 import { getBaby } from "~/.server/baby";
 import { requireUserId } from "~/.server/session";
 import { getRecentTrackingEvents } from "~/.server/tracking";
 import { PlusIcon } from "lucide-react";
+import AddCaregiverModal from "~/components/AddCaregiverModal";
 import { t } from '~/src/utils/translate';
 import { LanguageSelector } from "~/components/LanguageSelector";
 
@@ -81,6 +83,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function BabyDetails() {
   const { baby, eliminations, feedings, sleepSessions } =
     useLoaderData<typeof loader>();
+  const [showCaregiverModal, setShowCaregiverModal] = useState(false);
 
   const caregivers = (baby as Baby).caregivers
     .map((c: Caregiver) => `${c.user.firstName} ${c.user.lastName}`)
@@ -233,6 +236,12 @@ export default function BabyDetails() {
       </div>
 
       <Outlet />
+
+      <AddCaregiverModal
+        babyId={baby.id}
+        isOpen={showCaregiverModal}
+        onClose={() => setShowCaregiverModal(false)}
+      />
     </div>
   );
 }
