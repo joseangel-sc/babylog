@@ -1,9 +1,11 @@
 import { vi } from "vitest";
+import { useActionData } from "@remix-run/react";
 
 // Mock setup must come before other imports
 vi.mock("@remix-run/react", () => ({
   useActionData: vi.fn(),
-  Form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
+  Form: ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => 
+    <form {...props}>{children}</form>,
   useNavigate: () => vi.fn(),
   useSubmit: () => vi.fn(),
   useLoaderData: vi.fn(),
@@ -39,11 +41,21 @@ vi.mock("~/.server/user", () => ({
   verifyLogin: vi.fn(),
 }));
 
+// Add mock for translation utility
+vi.mock('~/src/utils/translate', () => ({
+  t: (key: string) => {
+    const translations: Record<string, string> = {
+      'auth.errors.invalidCredentials': 'Invalid credentials',
+      'auth.errors.credentialsRequired': 'Email and password are required'
+    };
+    return translations[key] || key;
+  }
+}));
+
 // Now we can do our imports
 import { render, screen, fireEvent } from "@testing-library/react";
 import { redirect } from "@remix-run/node";
-import { action, loader } from "~/routes/_index";
-import Login from "~/routes/_index";
+import Login, { loader, action } from "~/routes/_index";
 
 describe("Login Page", () => {
   describe("loader", () => {
@@ -81,12 +93,10 @@ describe("Login Page", () => {
       });
 
       const response = await action({ request, context: {}, params: {} });
-      expect(response).toEqual(
-        new Response(JSON.stringify({ error: "Invalid credentials" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        })
-      );
+      const responseData = await response.json();
+      
+      expect(responseData).toEqual({ error: 'Invalid credentials' });
+      expect(response.status).toBe(400);
     });
 
     it("creates user session on successful login", async () => {
@@ -131,10 +141,9 @@ describe("Login Page", () => {
     });
 
     it("displays error message when provided", () => {
-      const { useActionData } = require("@remix-run/react");
-      useActionData.mockImplementation(() => ({
+      (useActionData as jest.Mock).mockReturnValue({
         error: "Test error message",
-      }));
+      });
 
       render(<Login />);
       expect(screen.getByText("Test error message")).toBeInTheDocument();

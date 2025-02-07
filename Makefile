@@ -36,6 +36,9 @@ db-restart: ## Restart the database container
 db-logs: ## Show database logs
 	docker compose logs -f
 
+db-shell: ## Access PostgreSQL shell inside the container
+	docker compose exec db psql -U remix_user -d remix_db
+
 db-clean: ## Stop and remove database container, volume, and all data
 	docker compose down -v
 
@@ -70,7 +73,7 @@ reset-all: ## Reset everything - database, migrations, and node modules
 	@make seed
 
 lint: ## Run linter
-	npm run lint || true
+	npx eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .
 
 format: ## Format code with Prettier
 	npm run format || true

@@ -2,6 +2,7 @@ import { redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { requireUserId } from "~/.server/session";
 import { createBaby } from "~/.server/baby";
+import { t } from '~/src/utils/translate';
 
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await requireUserId(request);
@@ -13,7 +14,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const gender = formData.get("gender") as string;
 
   if (!firstName || !lastName || !dateOfBirth) {
-    return { error: "All fields are required" };
+    return { error: t('newBaby.errors.allFieldsRequired') };
   }
 
   const baby = await createBaby(userId, {
@@ -31,7 +32,7 @@ export default function NewBaby() {
 
   return (
     <div className="max-w-md mx-auto p-8">
-      <h1 className="text-2xl font-bold mb-8">Add New Baby</h1>
+      <h1 className="text-2xl font-bold mb-8">{t('newBaby.title')}</h1>
       
       <Form method="post" className="space-y-6">
         {actionData?.error && (
@@ -40,7 +41,7 @@ export default function NewBaby() {
         
         <div className="space-y-2">
           <label className="block text-sm font-medium">
-            First Name
+            {t('newBaby.fields.firstName')}
             <input
               type="text"
               name="firstName"
@@ -52,7 +53,7 @@ export default function NewBaby() {
 
         <div className="space-y-2">
           <label className="block text-sm font-medium">
-            Last Name
+            {t('newBaby.fields.lastName')}
             <input
               type="text"
               name="lastName"
@@ -64,7 +65,7 @@ export default function NewBaby() {
 
         <div className="space-y-2">
           <label className="block text-sm font-medium">
-            Date of Birth
+            {t('newBaby.fields.dateOfBirth')}
             <input
               type="date"
               name="dateOfBirth"
@@ -76,13 +77,13 @@ export default function NewBaby() {
 
         <div className="space-y-2">
           <label className="block text-sm font-medium">
-            Gender
+            {t('newBaby.fields.gender')}
             <select 
               name="gender"
               className="mt-2 block w-full rounded-md border-gray-300 shadow-sm p-2"
             >
-              <option value="girl">Girl</option>
-              <option value="boy">Boy</option>
+              <option value="girl">{t('newBaby.genderOptions.girl')}</option>
+              <option value="boy">{t('newBaby.genderOptions.boy')}</option>
             </select>
           </label>
         </div>
@@ -91,7 +92,7 @@ export default function NewBaby() {
           type="submit"
           className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 transition-colors"
         >
-          Add Baby
+          {t('newBaby.submit')}
         </button>
       </Form>
     </div>
