@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, Link, Outlet } from "@remix-run/react";
 import { getBaby } from "~/.server/baby";
 import { requireUserId } from "~/.server/session";
 import { getRecentTrackingEvents } from "~/.server/tracking";
 import { PlusIcon } from "lucide-react";
+import AddCaregiverModal from "~/components/AddCaregiverModal";
 
 interface Elimination {
   id: number;
@@ -47,7 +49,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const isAuthorized =
     baby.ownerId === userId || baby.caregivers.some((c) => c.userId === userId);
-  
+
   if (!isAuthorized) return redirect("/dashboard");
 
   const { eliminations, feedings, sleepSessions } =
@@ -59,8 +61,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function BabyDetails() {
   const { baby, eliminations, feedings, sleepSessions } =
     useLoaderData<typeof loader>();
+  const [showCaregiverModal, setShowCaregiverModal] = useState(false);
 
-  const caregivers = baby.caregivers  
+  const caregivers = baby.caregivers
     .map((c) => `${c.user.firstName} ${c.user.lastName}`)
     .join(", ");
 
@@ -72,9 +75,21 @@ export default function BabyDetails() {
             <span>
               {baby.firstName} {baby.lastName}
             </span>
-            <span className="text-lg font-normal text-gray-600">
-              Caregivers: {caregivers}
+          </div>
+          <div className="text-lg font-normal text-gray-600 flex items-center gap-2">
+            <span>
+              Caregivers:{" "}
+              {baby.caregivers
+                .map((c) => `${c.user.firstName} ${c.user.lastName}`)
+                .join(", ")}
             </span>
+            <button
+              onClick={() => setShowCaregiverModal(true)}
+              className="p-1 rounded-full hover:bg-gray-100"
+              aria-label="Add caregiver"
+            >
+              <PlusIcon className="w-5 h-5" />
+            </button>
           </div>
         </div>
         <div>
@@ -219,6 +234,12 @@ export default function BabyDetails() {
       </div>
 
       <Outlet />
+
+      <AddCaregiverModal
+        babyId={baby.id}
+        isOpen={showCaregiverModal}
+        onClose={() => setShowCaregiverModal(false)}
+      />
     </div>
   );
 }
