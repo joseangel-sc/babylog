@@ -8,118 +8,138 @@ import { t } from '~/src/utils/translate';
 
 type TrackingType = 'elimination' | 'feeding' | 'sleep';
 
-function getTrackingConfig(type: TrackingType) {
-  const configs = {
-    elimination: {
-      title: t('tracking.elimination.title'),
-      fields: [
-        {
-          id: "timestamp",
-          label: t('tracking.when'),
-          type: "datetime-local" as const,
-          required: true
-        },
-        {
-          id: "type",
-          label: t('tracking.type'),
-          type: "select" as const,
-          required: true,
-          options: [
-            { value: "wet", label: t('tracking.elimination.types.wet') },
-            { value: "dirty", label: t('tracking.elimination.types.dirty') },
-            { value: "both", label: t('tracking.elimination.types.both') }
-          ]
-        },
-        {
-          id: "weight",
-          label: t('tracking.elimination.weight'),
-          type: "number" as const
-        },
-        {
-          id: "notes",
-          label: t('tracking.notes'),
-          type: "textarea" as const,
-          placeholder: t('tracking.notesPlaceholder')
-        }
-      ]
-    },
-    feeding: {
-      title: t('tracking.feeding.title'),
-      fields: [
-        {
-          id: "timestamp",
-          label: t('tracking.when'),
-          type: "datetime-local" as const,
-          required: true
-        },
-        {
-          id: "type",
-          label: t('tracking.type'),
-          type: "select" as const,
-          required: true,
-          options: [
-            { value: "breast", label: t('tracking.feeding.types.breast') },
-            { value: "bottle", label: t('tracking.feeding.types.bottle') },
-            { value: "formula", label: t('tracking.feeding.types.formula') }
-          ]
-        },
-        {
-          id: "amount",
-          label: t('tracking.feeding.amount'),
-          type: "number" as const
-        },
-        {
-          id: "notes",
-          label: t('tracking.notes'),
-          type: "textarea" as const,
-          placeholder: t('tracking.notesPlaceholder')
-        }
-      ]
-    },
-    sleep: {
-      title: t('tracking.sleep.title'),
-      fields: [
-        {
-          id: "timestamp",
-          label: t('tracking.when'),
-          type: "datetime-local" as const,
-          required: true
-        },
-        {
-          id: "type",
-          label: t('tracking.type'),
-          type: "select" as const,
-          required: true,
-          options: [
-            { value: "nap", label: t('tracking.sleep.types.nap') },
-            { value: "night", label: t('tracking.sleep.types.night') }
-          ]
-        },
-        {
-          id: "quality",
-          label: t('tracking.sleep.quality'),
-          type: "select" as const,
-          required: false,
-          options: [
-            { value: "1", label: "★" },
-            { value: "2", label: "★★" },
-            { value: "3", label: "★★★" },
-            { value: "4", label: "★★★★" },
-            { value: "5", label: "★★★★★" }
-          ]
-        },
-        {
-          id: "notes",
-          label: t('tracking.notes'),
-          type: "textarea" as const,
-          placeholder: t('tracking.notesPlaceholder')
-        }
-      ]
-    }
-  };
-  
-  return configs[type];
-}
+const trackingConfigs = {
+  elimination: {
+    title: "Elimination",
+    fields: [
+      {
+        id: "timestamp",
+        label: "When",
+        type: "datetime-local" as const,
+        required: true
+      },
+      {
+        id: "type",
+        label: "Type",
+        type: "select" as const,
+        required: true,
+        options: [
+          { value: "wet", label: "Wet" },
+          { value: "dirty", label: "Dirty" },
+          { value: "both", label: "Both" }
+        ]
+      },
+      {
+        id: "weight",
+        label: "Weight (g)",
+        type: "number" as const
+      },
+      {
+        id: "notes",
+        label: "Notes",
+        type: "textarea" as const,
+        placeholder: "Add any additional notes..."
+      }
+    ]
+  },
+  feeding: {
+    title: "Feeding",
+    fields: [
+      {
+        id: "timestamp",
+        label: "When",
+        type: "datetime-local" as const,
+        required: true
+      },
+      {
+        id: "type",
+        label: "Type",
+        type: "select" as const,
+        required: true,
+        options: [
+          { value: "breast", label: "Breast" },
+          { value: "bottle", label: "Bottle" },
+          { value: "formula", label: "Formula" }
+        ]
+      },
+      {
+        id: "amount",
+        label: "Amount (ml)",
+        type: "number" as const
+      },
+      {
+        id: "notes",
+        label: "Notes",
+        type: "textarea" as const,
+        placeholder: "Add any additional notes..."
+      }
+    ]
+  },
+  sleep: {
+    title: "Sleep",
+    fields: [
+      {
+        id: "startTime",
+        label: "Start Time",
+        type: "datetime-local" as const,
+        required: true
+      },
+      {
+        id: "endTime",
+        label: "End Time",
+        type: "datetime-local" as const,
+        required: true
+      },
+      {
+        id: "how",
+        label: "How",
+        type: "text" as const, 
+        placeholder: "How did the baby fall asleep?"
+      },      
+      {
+        id: "whereFellAsleep",
+        label: "Where baby fell asleep",
+        type: "text" as const,
+        placeholder: "Where did the baby fall asleep?"
+      },
+      {
+        id: "whereSlept",
+        label: "Where baby slept",
+        type: "text" as const,
+        placeholder: "Where did the baby sleep?"
+      },
+      {
+        id: "type",
+        label: "Type",
+        type: "select" as const,
+        required: true,
+        options: [
+          { value: "nap", label: "Nap" },
+          { value: "night", label: "Night Sleep" }
+        ]
+      },
+      {
+        id: "quality",
+        label: "Quality",
+        type: "select" as const,
+        required: false,
+        options: [
+          { value: "1", label: "★" },
+          { value: "2", label: "★★" },
+          { value: "3", label: "★★★" },
+          { value: "4", label: "★★★★" },
+          { value: "5", label: "★★★★★" }
+        ]
+      },
+      {
+        id: "notes",
+        label: "Notes",
+        type: "textarea" as const,
+        placeholder: "Add any additional notes..."
+      }
+    ]
+  }
+};
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const userId = await requireUserId(request);
@@ -171,7 +191,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
       await trackSleep({
         ...baseData,
         startTime: timestamp,
+        endTime: new Date(formData.get("endTime") as string),
+        how: formData.get("how") as string,
+        whereFellAsleep: formData.get("whereFellAsleep") as string,
+        whereSlept: formData.get("whereSlept") as string,
+        type: formData.get("type") as string,
         quality: formData.get("quality") ? Number(formData.get("quality")) : null,
+        notes: formData.get("notes") as string
       });
       break;
     default:

@@ -109,8 +109,10 @@ model Sleep {
   id            Int       @id @default(autoincrement())
   startTime     DateTime
   endTime       DateTime?
+  how           String?
+  whereFellAsleep String?
+  whereSlept     String?
   type          String
-  location      String?
   quality       Int?
   notes         String?
   createdAt     DateTime  @default(now())

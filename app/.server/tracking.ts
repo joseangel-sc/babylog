@@ -25,7 +25,9 @@ interface SleepData {
   type: string;
   startTime: Date;
   endTime?: Date | null;
-  location?: string | null;
+  how?: string | null;
+  whereFellAsleep?: string | null;
+  whereSlept?: string | null;
   quality?: number | null;
   notes?: string | null;
 }
