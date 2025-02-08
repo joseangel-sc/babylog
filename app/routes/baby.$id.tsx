@@ -80,17 +80,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function BabyDetails() {
   const { baby, eliminations, feedings, sleepSessions } =
-<<<<<<< Updated upstream
     useLoaderData<typeof loader>();
-=======
-    useLoaderData<{ 
-      baby: BabyWithCaregivers;
-      eliminations: Elimination[];
-      feedings: Feeding[];
-      sleepSessions: Sleep[];
-    }>();
-  const [showCaregiverModal, setShowCaregiverModal] = useState(false);
->>>>>>> Stashed changes
 
   const caregivers = baby.caregivers  
     .map((c) => `${c.user.firstName} ${c.user.lastName}`)
