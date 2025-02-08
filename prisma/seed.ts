@@ -63,16 +63,16 @@ async function seed() {
           },
         ],
       },
-      sleepSessions: {
-        create: [
-          {
-            startTime: new Date('2024-01-01T09:00:00Z'),
-            endTime: new Date('2024-01-01T10:30:00Z'),
-            type: 'nap',
-            quality: 4,
-          },
-        ],
-      },
+      // sleepSessions: {
+      //   create: [
+      //     {
+      //       startTime: new Date('2024-01-01T09:00:00Z'),
+      //       endTime: new Date('2024-01-01T10:30:00Z'),
+      //       type: 'nap',
+      //       quality: 4,
+      //     },
+      //   ],
+      // },
     },
   });
 

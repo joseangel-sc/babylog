@@ -26,6 +26,28 @@ interface Feeding {
   amount?: number | null;
 }
 
+interface User {
+  firstName: string;
+  lastName: string;
+}
+
+interface Caregiver {
+  userId: number;
+  user: User;
+}
+
+interface BabyWithCaregivers {
+  id: number;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date;
+  gender: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  ownerId: number;
+  caregivers: Caregiver[];
+}
+
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const userId = await requireUserId(request);
   const baby = await getBaby(Number(params.id), {
@@ -58,7 +80,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function BabyDetails() {
   const { baby, eliminations, feedings, sleepSessions } =
+<<<<<<< Updated upstream
     useLoaderData<typeof loader>();
+=======
+    useLoaderData<{ 
+      baby: BabyWithCaregivers;
+      eliminations: Elimination[];
+      feedings: Feeding[];
+      sleepSessions: Sleep[];
+    }>();
+  const [showCaregiverModal, setShowCaregiverModal] = useState(false);
+>>>>>>> Stashed changes
 
   const caregivers = baby.caregivers  
     .map((c) => `${c.user.firstName} ${c.user.lastName}`)

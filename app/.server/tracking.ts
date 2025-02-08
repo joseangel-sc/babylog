@@ -25,7 +25,9 @@ interface SleepData {
   type: string;
   startTime: Date;
   endTime?: Date | null;
-  location?: string | null;
+  how?: string | null;
+  whereFellAsleep?: string | null;
+  whereSlept?: string | null;
   quality?: number | null;
   notes?: string | null;
 }
@@ -67,6 +69,16 @@ export async function getRecentTrackingEvents(babyId: number, limit: number = 5)
       where: { babyId },
       orderBy: { startTime: 'desc' },
       take: limit,
+      select: {
+        id: true,
+        type: true,
+        startTime: true,
+        endTime: true,
+        quality: true,
+        whereFellAsleep: true,
+        whereSlept: true,
+        notes: true,
+      },
     }),
   ]);
 
