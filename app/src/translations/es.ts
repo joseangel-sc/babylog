@@ -55,6 +55,11 @@ export const es: TranslationKeys = {
     },
     sleep: {
       title: 'Sueño',
+      startTime: 'Inicio',
+      endTime: 'Fin',
+      how: 'Cómo',
+      whereFellAsleep: 'Dónde se quedó dormido',
+      whereSlept: 'Dónde durmió',
       quality: 'Calidad',
       types: {
         nap: 'Siesta',

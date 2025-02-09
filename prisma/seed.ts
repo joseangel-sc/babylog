@@ -22,8 +22,6 @@ async function seed() {
     },
   });
 
-  console.log('Created user without baby:', userWithoutBaby.id);
-
   await prisma.baby.create({
     data: {
       firstName: 'Lil',
@@ -65,7 +63,7 @@ async function seed() {
           },
         ],
       },
-      //sleepSessions: {
+      sleepSessions: {
         create: [
           {
             startTime: new Date('2024-01-01T09:00:00Z'),
@@ -74,7 +72,7 @@ async function seed() {
             quality: 4,
           },
         ],
-      //},
+      },
     },
   });
 
