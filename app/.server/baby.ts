@@ -112,5 +112,51 @@ export async function getUserBabies(userId: number) {
     });
 }
 
+export async function sendParentInvite(
+  babyId: number,
+  senderId: number,
+  data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }
+) {
+  return db.$transaction(async (tx) => {
+    // Check if user already exists
+    const existingUser = await tx.user.findUnique({
+      where: { email: data.email.toLowerCase() },
+    });
+
+    if (existingUser) {
+      // If user exists, add them as owner and caregiver directly
+      await tx.baby.update({
+        where: { id: babyId },
+        data: {
+          owners: {
+            connect: { id: existingUser.id },
+          },
+          caregivers: {
+            create: {
+              userId: existingUser.id,
+              relationship: "PARENT",
+              permissions: ["all"],
+            },
+          },
+        },
+      });
+    } else {
+      // Create parent invite
+      await tx.parentInvite.create({
+        data: {
+          ...data,
+          email: data.email.toLowerCase(),
+          babyId,
+          senderId: senderId,
+        },
+      });
+      // TODO: Send email invitation (we'll implement this later)
+    }
+  });
+}
 
 //export async fucntion addBabyOwner ->  Add another baby owner 
