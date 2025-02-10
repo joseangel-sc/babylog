@@ -22,6 +22,7 @@ model User {
   posts         Post[]
   comments      Comment[]
   albumAccess   AlbumAccess[]
+  sentInvites   ParentInvite[] @relation("SentInvites")
 
   @@index([email])
 }
@@ -47,6 +48,7 @@ model Baby {
   healthRecords HealthRecord[]
   measurements  Measurement[]
   albums        Album[]
+  parentInvites  ParentInvite[]
 
   @@index([dateOfBirth])
 }
@@ -318,4 +320,21 @@ model Comment {
 
   @@index([postId])
   @@index([authorId])
+}
+
+model ParentInvite {
+  id        Int      @id @default(autoincrement())
+  email     String
+  firstName String
+  lastName  String
+  babyId    Int
+  baby      Baby     @relation(fields: [babyId], references: [id])
+  senderId  Int
+  sentBy    User     @relation("SentInvites", fields: [senderId], references: [id])
+  status    String   @default("PENDING") // PENDING, ACCEPTED, DECLINED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, babyId])
+  @@index([senderId])
 }
