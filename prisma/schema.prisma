@@ -8,35 +8,35 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @unique
-  passwordHash  String
-  firstName     String    @default("Unknown")
-  lastName      String    @default("User")
-  phone         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  firstName    String   @default("Unknown")
+  lastName     String   @default("User")
+  phone        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  babies        BabyCaregiver[]
-  ownedBabies   Baby[]    @relation("BabyOwner")
-  posts         Post[]
-  comments      Comment[]
-  albumAccess   AlbumAccess[]
-  sentInvites   ParentInvite[] @relation("SentInvites")
+  babies       BabyCaregiver[]
+  ownedBabies  Baby[]          @relation("BabyOwner")
+  posts        Post[]
+  comments     Comment[]
+  albumAccess  AlbumAccess[]
+  ParentInvite ParentInvite[]
 
   @@index([email])
 }
 
 model Baby {
-  id            Int       @id @default(autoincrement())
-  firstName     String
-  lastName      String
-  dateOfBirth   DateTime
-  gender        String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime
+  gender      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  owner         User      @relation("BabyOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner         User            @relation("BabyOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId       Int
   caregivers    BabyCaregiver[]
   eliminations  Elimination[]
@@ -48,22 +48,22 @@ model Baby {
   healthRecords HealthRecord[]
   measurements  Measurement[]
   albums        Album[]
-  parentInvites  ParentInvite[]
+  parentInvites ParentInvite[]
 
   @@index([dateOfBirth])
 }
 
 model BabyCaregiver {
-  id            Int       @id @default(autoincrement())
-  relationship  String
-  permissions   String[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id           Int      @id @default(autoincrement())
+  relationship String
+  permissions  String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        Int
+  baby   Baby @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
 
   @@unique([babyId, userId])
   @@index([babyId])
@@ -71,37 +71,37 @@ model BabyCaregiver {
 }
 
 model Elimination {
-  id            Int       @id @default(autoincrement())
-  timestamp     DateTime
-  type          String
-  weight        Float?
-  success       Boolean
-  location      String?
-  notes         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime
+  type      String
+  weight    Float?
+  success   Boolean
+  location  String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
+  baby   Baby @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
 
   @@index([timestamp])
   @@index([babyId, timestamp])
 }
 
 model Feeding {
-  id            Int       @id @default(autoincrement())
-  startTime     DateTime
-  endTime       DateTime?
-  type          String
-  side          String?
-  amount        Float?
-  food          String?
-  notes         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int       @id @default(autoincrement())
+  startTime DateTime
+  endTime   DateTime?
+  type      String
+  side      String?
+  amount    Float?
+  food      String?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
+  baby   Baby @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
 
   @@index([startTime])
   @@index([babyId, startTime])
@@ -120,121 +120,121 @@ model Sleep {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
+  baby   Baby @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
 
   @@index([startTime])
   @@index([babyId, startTime])
 }
 
 model Activity {
-  id            Int       @id @default(autoincrement())
-  startTime     DateTime
-  endTime       DateTime?
-  type          String
-  description   String?
-  milestone     Boolean   @default(false)
-  notes         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int       @id @default(autoincrement())
+  startTime   DateTime
+  endTime     DateTime?
+  type        String
+  description String?
+  milestone   Boolean   @default(false)
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
-  photos        ActivityPhoto[]
+  baby   Baby            @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
+  photos ActivityPhoto[]
 
   @@index([startTime])
   @@index([babyId, startTime])
 }
 
 model Milestone {
-  id            Int       @id @default(autoincrement())
-  date          DateTime
-  category      String
-  title         String
-  description   String?
-  notes         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  category    String
+  title       String
+  description String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
-  photos        MilestonePhoto[]
+  baby   Baby             @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
+  photos MilestonePhoto[]
 
   @@index([date])
   @@index([babyId, date])
 }
 
 model HealthRecord {
-  id            Int       @id @default(autoincrement())
-  timestamp     DateTime
-  type          String
-  value         Float?
-  description   String?
-  notes         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  timestamp   DateTime
+  type        String
+  value       Float?
+  description String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
+  baby   Baby @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
 
   @@index([timestamp])
   @@index([babyId, timestamp])
 }
 
 model Measurement {
-  id            Int       @id @default(autoincrement())
-  date          DateTime
-  weight        Float?
-  height        Float?
-  headCirc      Float?
-  notes         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  weight    Float?
+  height    Float?
+  headCirc  Float?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
+  baby   Baby @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
 
   @@index([date])
   @@index([babyId, date])
 }
 
 model Album {
-  id            Int       @id @default(autoincrement())
-  title         String
-  description   String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
-  photos        AlbumPhoto[]
-  access        AlbumAccess[]
+  baby   Baby          @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId Int
+  photos AlbumPhoto[]
+  access AlbumAccess[]
 
   @@index([babyId])
 }
 
 model Photo {
-  id            Int       @id @default(autoincrement())
-  url           String
-  caption       String?
-  timestamp     DateTime
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  url       String
+  caption   String?
+  timestamp DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  babyPhotos        BabyPhoto[]
-  albumPhotos       AlbumPhoto[]
-  activityPhotos    ActivityPhoto[]
-  milestonePhotos   MilestonePhoto[]
+  babyPhotos      BabyPhoto[]
+  albumPhotos     AlbumPhoto[]
+  activityPhotos  ActivityPhoto[]
+  milestonePhotos MilestonePhoto[]
 
   @@index([timestamp])
 }
 
 model BabyPhoto {
-  baby          Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
-  babyId        Int
-  photo         Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
-  photoId       Int
-  createdAt     DateTime @default(now())
+  baby      Baby     @relation(fields: [babyId], references: [id], onDelete: Cascade)
+  babyId    Int
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId   Int
+  createdAt DateTime @default(now())
 
   @@id([babyId, photoId])
   @@index([babyId])
@@ -242,11 +242,11 @@ model BabyPhoto {
 }
 
 model AlbumPhoto {
-  album         Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
-  albumId       Int
-  photo         Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
-  photoId       Int
-  createdAt     DateTime @default(now())
+  album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId   Int
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId   Int
+  createdAt DateTime @default(now())
 
   @@id([albumId, photoId])
   @@index([albumId])
@@ -254,11 +254,11 @@ model AlbumPhoto {
 }
 
 model ActivityPhoto {
-  activity      Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
-  activityId    Int
-  photo         Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
-  photoId       Int
-  createdAt     DateTime @default(now())
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  activityId Int
+  photo      Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId    Int
+  createdAt  DateTime @default(now())
 
   @@id([activityId, photoId])
   @@index([activityId])
@@ -266,11 +266,11 @@ model ActivityPhoto {
 }
 
 model MilestonePhoto {
-  milestone     Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
-  milestoneId   Int
-  photo         Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
-  photoId       Int
-  createdAt     DateTime @default(now())
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestoneId Int
+  photo       Photo     @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId     Int
+  createdAt   DateTime  @default(now())
 
   @@id([milestoneId, photoId])
   @@index([milestoneId])
@@ -278,15 +278,15 @@ model MilestonePhoto {
 }
 
 model AlbumAccess {
-  id            Int       @id @default(autoincrement())
-  permissions   String[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  permissions String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  album         Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
-  albumId       Int
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        Int
+  album   Album @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId Int
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
 
   @@unique([albumId, userId])
   @@index([albumId])
@@ -294,29 +294,29 @@ model AlbumAccess {
 }
 
 model Post {
-  id            Int       @id @default(autoincrement())
-  title         String
-  content       String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId      Int
-  comments      Comment[]
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
+  comments Comment[]
 
   @@index([authorId])
 }
 
 model Comment {
-  id            Int       @id @default(autoincrement())
-  content       String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  post          Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId        Int
-  author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId      Int
+  post     Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId   Int
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
 
   @@index([postId])
   @@index([authorId])
@@ -325,12 +325,10 @@ model Comment {
 model ParentInvite {
   id        Int      @id @default(autoincrement())
   email     String
-  firstName String
-  lastName  String
   babyId    Int
   baby      Baby     @relation(fields: [babyId], references: [id])
   senderId  Int
-  sentBy    User     @relation("SentInvites", fields: [senderId], references: [id])
+  sentBy    User     @relation(fields: [senderId], references: [id])
   status    String   @default("PENDING") // PENDING, ACCEPTED, DECLINED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

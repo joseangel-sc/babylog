@@ -26,3 +26,11 @@ export async function removeCaregiver(babyId: number, userId: number) {
     },
   });
 }
+
+export async function addBabyOwner(babyId: number, userId: number) {
+  return db.baby.update({
+    where: { id: babyId },
+    data: { ownerId: userId },
+  });
+}
+

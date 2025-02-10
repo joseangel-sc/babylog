@@ -1,89 +1,33 @@
 import { db } from "./db";
 import type { Baby } from "@prisma/client";
 
-interface AdditionalParent {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
-
 export async function createBaby(
     ownerId: number,
-    data: Pick<Baby, "firstName" | "lastName" | "dateOfBirth" | "gender"> & {
-        additionalParent?: AdditionalParent;
-    }
+    data: Pick<Baby, "firstName" | "lastName" | "dateOfBirth" | "gender">
 ) {
-    const { additionalParent, ...babyData } = data;
-    console.log("Creating baby with data:", { babyData, additionalParent }); // Debug log
-
-    return db.$transaction(async (tx) => {
-        // Create baby with initial owner as caregiver
-        const baby = await tx.baby.create({
-            data: {
-                ...babyData,
-                ownerId,
-                caregivers: {
-                    create: {
-                        userId: ownerId,
-                        relationship: "PARENT",
-                        permissions: ["all"],
-                    },
-                },
-            },
-            include: {
-                caregivers: {
-                    include: {
-                        user: {
-                            select: {
-                                firstName: true,
-                                lastName: true,
-                            },
-                        },
-                    },
-                },
-            },
-        });
-
-        if (additionalParent) {
-            console.log("Adding additional parent:", additionalParent); // Debug log
-            
-            // Check if user already exists
-            let user = await tx.user.findUnique({
-                where: { email: additionalParent.email.toLowerCase() },
-            });
-
-            if (!user) {
-                // Create new user if they don't exist
-                user = await tx.user.create({
-                    data: {
-                        ...additionalParent,
-                        email: additionalParent.email.toLowerCase(),
-                        passwordHash: "", // We'll handle password setup later
-                    },
-                });
+    return db.baby.create({
+        data: {
+            ...data,
+            ownerId,
+            caregivers: {
+                create: {
+                    userId: ownerId,
+                    relationship: "PARENT"
+                }
             }
-
-            // Add as caregiver if not already one
-            const existingCaregiver = await tx.babyCaregiver.findFirst({
-                where: {
-                    babyId: baby.id,
-                    userId: user.id,
-                },
-            });
-
-            if (!existingCaregiver) {
-                await tx.babyCaregiver.create({
-                    data: {
-                        babyId: baby.id,
-                        userId: user.id,
-                        relationship: "PARENT",
-                        permissions: ["all"],
-                    },
-                });
+        },
+        include: {
+            caregivers: {
+                include: {
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                }
             }
         }
-
-        return baby;
     });
 }
 
@@ -111,5 +55,6 @@ export async function getUserBabies(userId: number) {
         orderBy: { dateOfBirth: "desc" },
     });
 }
+
 
 //export async fucntion addBabyOwner ->  Add another baby owner 
