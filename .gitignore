@@ -16,7 +16,6 @@ node_modules
 !.env.example
 
 # Prisma
-/prisma/migrations/*/
 /prisma/*.db
 /prisma/*.db-journal
 

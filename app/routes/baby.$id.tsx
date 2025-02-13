@@ -105,7 +105,7 @@ export default function BabyDetails() {
         {/* Eliminations */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{t('baby.recent.eliminations')}</h2>
+            <h2 className="text-lg font-semibold text-gray-800">Recent Eliminations</h2>
             <div className="flex items-center gap-2">
               <Link
                 to={`/baby/${baby.id}/track/elimination`}
@@ -148,7 +148,7 @@ export default function BabyDetails() {
         {/* Feedings */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{t('baby.recent.feedings')}</h2>
+            <h2 className="text-lg font-semibold text-gray-800">Recent Feedings</h2>
             <div className="flex items-center gap-2">
               <Link
                 to={`/baby/${baby.id}/track/feeding`}
@@ -191,7 +191,7 @@ export default function BabyDetails() {
         {/* Sleep */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{t('baby.recent.sleep')}</h2>
+            <h2 className="text-lg font-semibold text-gray-800">Recent Sleep</h2>
             <div className="flex items-center gap-2">
               <Link
                 to={`/baby/${baby.id}/track/sleep`}

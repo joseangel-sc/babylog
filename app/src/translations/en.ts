@@ -53,6 +53,11 @@ export const en = {
     },
     sleep: {
       title: 'Sleep',
+      startTime: 'Start Time',
+      endTime: 'End Time',
+      how: 'How',
+      whereFellAsleep: 'Where Baby Fell Asleep',
+      whereSlept: 'Where Baby Slept',
       quality: 'Quality',
       types: {
         nap: 'Nap',

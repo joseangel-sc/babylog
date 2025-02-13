@@ -80,10 +80,34 @@ function getTrackingConfig(type: TrackingType) {
       title: t('tracking.sleep.title'),
       fields: [
         {
-          id: "timestamp",
-          label: t('tracking.when'),
+          id: "startTime",
+          label: t('tracking.sleep.startTime'),
           type: "datetime-local" as const,
           required: true
+        },
+        {
+          id: "endTime",
+          label: t('tracking.sleep.endTime'),
+          type: "datetime-local" as const,
+          required: true
+        },
+        {
+          id: "how",
+          label: t('tracking.sleep.how'),
+          type: "text" as const,
+          required: false,
+        },
+        {
+          id: "whereFellAsleep",
+          label: t('tracking.sleep.whereFellAsleep'),
+          type: "text" as const,
+          required: false,
+        },
+        {
+          id: "whereSlept",
+          label: t('tracking.sleep.whereSlept'),
+          type: "text" as const,
+          required: false,
         },
         {
           id: "type",

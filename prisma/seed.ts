@@ -22,8 +22,6 @@ async function seed() {
     },
   });
 
-  console.log('Created user without baby:', userWithoutBaby.id);
-
   await prisma.baby.create({
     data: {
       firstName: 'Lil',
