@@ -5,6 +5,7 @@ import { requireUserId } from "~/.server/session";
 import { trackElimination, trackFeeding, trackSleep } from "~/.server/tracking";
 import { TrackingModal } from "~/components/tracking/TrackingModal";
 import { t } from '~/src/utils/translate';
+import type { Baby, BabyCaregiver } from "@prisma/client";
 
 type TrackingType = 'elimination' | 'feeding' | 'sleep';
 
@@ -151,7 +152,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   
   if (!baby) return redirect("/dashboard");
   const isAuthorized = baby.ownerId === userId || 
-    baby.caregivers.some((c: { userId: number }) => c.userId === userId);
+    (baby as Baby & { caregivers: BabyCaregiver[] }).caregivers.some(c => c.userId === userId);
   
   if (!isAuthorized) return redirect("/dashboard");
 

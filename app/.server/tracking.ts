@@ -32,6 +32,17 @@ interface SleepData {
   notes?: string | null;
 }
 
+interface SleepUpdateData {
+  startTime?: Date;
+  endTime?: Date | null;
+  how?: string | null;
+  whereFellAsleep?: string | null;
+  whereSlept?: string | null;
+  type?: string;
+  quality?: number | null;
+  notes?: string | null;
+}
+
 export async function trackElimination(data: EliminationData) {
   return db.elimination.create({
     data: {
@@ -50,6 +61,13 @@ export async function trackFeeding(data: FeedingData) {
 export async function trackSleep(data: SleepData) {
   return db.sleep.create({
     data: data,
+  });
+}
+
+export async function editSleep(id: number, data: SleepUpdateData) {
+  return db.sleep.update({
+    where: { id },
+    data
   });
 }
 
