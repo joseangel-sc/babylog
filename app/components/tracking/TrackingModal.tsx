@@ -31,7 +31,7 @@ export function TrackingModal({ babyId, title, fields }: TrackingModalProps) {
     return () => window.removeEventListener("keydown", handleEscape);
   }, [navigate, babyId]);
 
-  const inputClasses = "w-full p-2 border rounded bg-black text-white";
+  const inputClasses = "w-full p-2 border rounded bg-black text-white [&>option]:text-black";
   const labelClasses = "block text-sm font-medium mb-1 text-white";
 
   const renderField = (field: Field) => {

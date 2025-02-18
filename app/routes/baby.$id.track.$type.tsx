@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getBaby } from "~/.server/baby";
 import { requireUserId } from "~/.server/session";
@@ -161,7 +161,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect(`/baby/${params.id}`);
   }
 
-  return json({ baby, trackingConfig: getTrackingConfig(type) });
+  return new Response(JSON.stringify({ baby, trackingConfig: getTrackingConfig(type) }), {
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
