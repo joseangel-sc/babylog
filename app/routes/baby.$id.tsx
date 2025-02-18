@@ -6,6 +6,7 @@ import { getRecentTrackingEvents } from "~/.server/tracking";
 import { PlusIcon } from "lucide-react";
 import { t } from '~/src/utils/translate';
 import { LanguageSelector } from "~/components/LanguageSelector";
+import { TrackingSection } from "~/components/tracking/TrackingSection";
 
 interface Elimination {
   id: number;
@@ -102,134 +103,47 @@ export default function BabyDetails() {
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {/* Eliminations */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">{t('baby.recent.eliminations')}</h2>
-            <div className="flex items-center gap-2">
-              <Link
-                to={`/baby/${baby.id}/track/elimination`}
-                className="p-1 rounded-full hover:bg-gray-100"
-                aria-label="Add elimination"
-              >
-                <PlusIcon className="w-5 h-5 text-gray-600" />
-              </Link>
-              <Link
-                to={`/baby/${baby.id}/eliminations`}
-                className="text-blue-500 hover:underline"
-              >
-                {t('baby.recent.viewAll')}
-              </Link>
-            </div>
-          </div>
-          {eliminations.length === 0 ? (
-            <p className="text-gray-500">{t('baby.recent.noData.eliminations')}</p>
-          ) : (
-            <ul className="space-y-3">
-              {eliminations.map((elimination: Elimination) => (
-                <li key={elimination.id} className="border-b pb-2">
-                  <div className="flex justify-between">
-                    <span className="font-medium text-gray-500">{elimination.type}</span>
-                    <span className="text-gray-500">
-                      {new Date(elimination.timestamp).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  {elimination.weight && (
-                    <div className="text-sm text-gray-600">
-                      {t('baby.details.weight')}: {elimination.weight}g
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <TrackingSection
+          title={t('baby.recent.eliminations')}
+          events={eliminations}
+          babyId={baby.id}
+          trackingType="elimination"
+          renderEventDetails={(event) => 
+            event.weight && (
+              <div className="text-sm text-gray-600">
+                {t('baby.details.weight')}: {event.weight}g
+              </div>
+            )
+          }
+        />
 
-        {/* Feedings */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">{t('baby.recent.feedings')}</h2>
-            <div className="flex items-center gap-2">
-              <Link
-                to={`/baby/${baby.id}/track/feeding`}
-                className="p-1 rounded-full hover:bg-gray-100"
-                aria-label="Add feeding"
-              >
-                <PlusIcon className="w-5 h-5 text-gray-600" />
-              </Link>
-              <Link
-                to={`/baby/${baby.id}/feedings`}
-                className="text-blue-500 hover:underline"
-              >
-                {t('baby.recent.viewAll')}
-              </Link>
-            </div>
-          </div>
-          {feedings.length === 0 ? (
-            <p className="text-gray-500">{t('baby.recent.noData.feedings')}</p>
-          ) : (
-            <ul className="space-y-3">
-              {feedings.map((feeding: Feeding) => (
-                <li key={feeding.id} className="border-b pb-2">
-                  <div className="flex justify-between">
-                    <span className="font-medium text-gray-500">{feeding.type}</span>
-                    <span className="text-gray-500">
-                      {new Date(feeding.startTime).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  {feeding.amount && (
-                    <div className="text-sm text-gray-600">
-                      {t('baby.details.amount')}: {feeding.amount}ml
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <TrackingSection
+          title={t('baby.recent.feedings')}
+          events={feedings}
+          babyId={baby.id}
+          trackingType="feeding"
+          renderEventDetails={(event) => 
+            event.amount && (
+              <div className="text-sm text-gray-600">
+                {t('baby.details.amount')}: {event.amount}ml
+              </div>
+            )
+          }
+        />
 
-        {/* Sleep */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">{t('baby.recent.sleep')}</h2>
-            <div className="flex items-center gap-2">
-              <Link
-                to={`/baby/${baby.id}/track/sleep`}
-                className="p-1 rounded-full hover:bg-gray-100"
-                aria-label="Add sleep"
-              >
-                <PlusIcon className="w-5 h-5 text-gray-600" />
-              </Link>
-              <Link
-                to={`/baby/${baby.id}/sleep`}
-                className="text-blue-500 hover:underline"
-              >
-                {t('baby.recent.viewAll')}
-              </Link>
-            </div>
-          </div>
-          {sleepSessions.length === 0 ? (
-            <p className="text-gray-500">{t('baby.recent.noData.sleep')}</p>
-          ) : (
-            <ul className="space-y-3">
-              {sleepSessions.map((sleep: Sleep) => (
-                <li key={sleep.id} className="border-b pb-2">
-                  <div className="flex justify-between">
-                    <span className="font-medium text-gray-500">{sleep.type}</span>
-                    <span className="text-gray-500">
-                      {new Date(sleep.startTime).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  {sleep.quality && (
-                    <div className="text-sm text-gray-600">
-                      {t('baby.details.quality')}: {sleep.quality}/5
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <TrackingSection
+          title={t('baby.recent.sleep')}
+          events={sleepSessions}
+          babyId={baby.id}
+          trackingType="sleep"
+          renderEventDetails={(event) => 
+            event.quality && (
+              <div className="text-sm text-gray-600">
+                {t('baby.details.quality')}: {event.quality}/5
+              </div>
+            )
+          }
+        />
       </div>
 
       <Outlet />
