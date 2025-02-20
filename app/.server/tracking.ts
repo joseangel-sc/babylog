@@ -32,7 +32,25 @@ interface SleepData {
   notes?: string | null;
 }
 
-interface SleepUpdateData {
+export interface EliminationUpdateData {
+  type?: string;
+  timestamp?: Date;
+  weight?: number | null;
+  location?: string | null;
+  notes?: string | null;
+}
+
+export interface FeedingUpdateData {
+  type?: string;
+  startTime?: Date;
+  endTime?: Date | null;
+  side?: string | null;
+  amount?: number | null;
+  food?: string | null;
+  notes?: string | null;
+}
+
+export interface SleepUpdateData {
   startTime?: Date;
   endTime?: Date | null;
   how?: string | null;
@@ -61,6 +79,20 @@ export async function trackFeeding(data: FeedingData) {
 export async function trackSleep(data: SleepData) {
   return db.sleep.create({
     data: data,
+  });
+}
+
+export async function editElimination(id: number, data: EliminationUpdateData) {
+  return db.elimination.update({
+    where: { id },
+    data
+  });
+}
+
+export async function editFeeding(id: number, data: FeedingUpdateData) {
+  return db.feeding.update({
+    where: { id },
+    data
   });
 }
 
@@ -95,4 +127,22 @@ export async function getRecentTrackingEvents(babyId: number, limit: number = 5)
     feedings,
     sleepSessions,
   };
+}
+
+export async function getElimination(id: number) {
+  return db.elimination.findUnique({
+    where: { id }
+  });
+}
+
+export async function getFeeding(id: number) {
+  return db.feeding.findUnique({
+    where: { id }
+  });
+}
+
+export async function getSleep(id: number) {
+  return db.sleep.findUnique({
+    where: { id }
+  });
 } 

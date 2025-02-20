@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, PencilIcon } from "lucide-react";
 import { t } from '~/src/utils/translate';
 
 interface TrackingEvent {
@@ -53,13 +53,24 @@ export function TrackingSection({
         <ul className="space-y-3">
           {events.map((event) => (
             <li key={event.id} className="border-b pb-2">
-              <div className="flex justify-between">
-                <span className="font-medium text-gray-500">{event.type}</span>
-                <span className="text-gray-500">
-                  {new Date(event.timestamp || event.startTime!).toLocaleTimeString()}
-                </span>
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-500">{event.type}</span>
+                    <span className="text-gray-500">
+                      {new Date(event.timestamp || event.startTime!).toLocaleTimeString()}
+                    </span>
+                  </div>
+                  {renderEventDetails && renderEventDetails(event)}
+                </div>
+                <Link
+                  to={`/baby/${babyId}/edit/${trackingType}/${event.id}`}
+                  className="ml-2 p-1 rounded-full hover:bg-gray-100"
+                  aria-label={`Edit ${trackingType}`}
+                >
+                  <PencilIcon className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+                </Link>
               </div>
-              {renderEventDetails && renderEventDetails(event)}
             </li>
           ))}
         </ul>
