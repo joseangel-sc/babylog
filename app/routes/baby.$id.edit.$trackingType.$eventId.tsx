@@ -120,7 +120,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   if (!event) return redirect(`/baby/${params.id}`);
 
-  return json({ baby, event, trackingType });
+  return new Response(JSON.stringify({ baby, event, trackingType }), {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
