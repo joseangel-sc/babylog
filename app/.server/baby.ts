@@ -57,13 +57,18 @@ export async function getUserBabies(userId: number) {
     });
 }
 
-export async function addBabyOwner(babyId: number, userId: number) {
-    return db.baby.update({
-        where: { id: babyId },
-        data: { ownerId: userId },
+export async function inviteNewParent(babyId: number, email: string, senderId: number) {
+    return db.parentInvite.create({
+      data: {
+        email,
+        babyId,
+        senderId,
+        status: "PENDING",
+        // Other fields will be filled with defaults from the schema
+      },
     });
-}
-
+  }
+  // This function handles the creation of a new baby and optionally populates 'parentInvite'
 export async function handleBabyCreation(request: Request) {
     const userId = await requireUserId(request);
     const formData = await request.formData();
@@ -73,17 +78,30 @@ export async function handleBabyCreation(request: Request) {
     const dateOfBirth = formData.get("dateOfBirth") as string;
     const gender = formData.get("gender") as string;
   
+    // Get the optional parent invite email if it exists
+    const inviteParent = formData.get("inviteParent") === "true";
+    const parentEmail = formData.get("parentEmail") as string || null;
+    
     if (!firstName || !lastName || !dateOfBirth) {
-      return { error: "All fields are required" };
-    }
-  
-    const baby = await createBaby(userId, {
-      firstName,
-      lastName,
-      dateOfBirth: new Date(dateOfBirth),
-      gender: gender || null,
-    });
-  
-    return { baby };
-  }
-//export async fucntion addBabyOwner ->  Add another baby owner 
+    return { error: "All fields are required" };
+}
+
+    // If inviting parent is selected but no email is provided
+    if (inviteParent && !parentEmail) {
+    return { error: "Parent email is required" };
+}
+
+const baby = await createBaby(userId, {
+  firstName,
+  lastName,
+  dateOfBirth: new Date(dateOfBirth),
+  gender: gender || null,
+});
+
+    // If parent invitation was requested, create the invitation
+    if (inviteParent && parentEmail) {
+    await inviteNewParent(baby.id, parentEmail, userId);
+}
+
+return { baby };
+}
