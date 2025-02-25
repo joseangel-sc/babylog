@@ -34,3 +34,11 @@ export async function addBabyOwner(babyId: number, userId: number) {
   });
 }
 
+export async function inviteBabyOwner(babyId: number, email: string, senderId: number) {
+  return db.parentInvite.create({
+    data: {
+      babyId,
+      email,
+      senderId,
+    },
+  });

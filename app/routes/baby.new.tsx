@@ -1,58 +1,20 @@
-import { useState } from "react";
-import { json, type ActionFunctionArgs } from "@remix-run/node";
-import { Form, useActionData, useSubmit } from "@remix-run/react";
-import { requireUserId } from "~/.server/session";
-import { createBaby } from "~/.server/baby";
+import { redirect, type ActionFunctionArgs } from "@remix-run/node";
+import { Form, useActionData } from "@remix-run/react";
+import { handleBabyCreation } from "~/.server/baby";
 import { t } from '~/src/utils/translate';
 
 export async function action({ request }: ActionFunctionArgs) {
-  const userId = await requireUserId(request);
-  const formData = await request.formData();
+  const result = await handleBabyCreation(request);
 
-  const firstName = formData.get("firstName") as string;
-  const lastName = formData.get("lastName") as string;
-  const dateOfBirth = formData.get("dateOfBirth") as string;
-  const gender = formData.get("gender") as string;
-
-  if (!firstName || !lastName || !dateOfBirth) {
-    return { error: t('newBaby.errors.allFieldsRequired') };
+  if ("error" in result) {
+    return result;
   }
 
-  const baby = await createBaby(userId, {
-    firstName,
-    lastName,
-    dateOfBirth: new Date(dateOfBirth),
-    gender: gender || null,
-  });
-
-  return json({ babyId: baby.id });
+  return redirect(`/baby/${result.baby.id}`);
 }
 
 export default function NewBaby() {
   const actionData = useActionData<typeof action>();
-  const submit = useSubmit();
-  const [showParentModal, setShowParentModal] = useState(false);
-  const [newBabyId, setNewBabyId] = useState<number | null>(null);
-  const [babyData, setBabyData] = useState({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
-    gender: "unknown",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-
-    submit(formData, { method: "post" });
-  };
-
-  // When we get a response with babyId, show the parent modal
-  if (actionData?.babyId && !newBabyId) {
-    setNewBabyId(actionData.babyId);
-    setShowParentModal(true);
-  }
 
   return (
     <div className="max-w-md mx-auto p-8">
