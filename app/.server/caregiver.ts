@@ -34,11 +34,13 @@ export async function addBabyOwner(babyId: number, userId: number) {
   });
 }
 
-export async function inviteBabyOwner(babyId: number, email: string, senderId: number) {
+export async function inviteNewCaregiver(babyId: number, email: string, senderId: number) {
   return db.parentInvite.create({
     data: {
-      babyId,
       email,
+      babyId,
       senderId,
+      status: "PENDING",
     },
   });
+}
