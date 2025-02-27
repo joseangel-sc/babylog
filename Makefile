@@ -94,4 +94,8 @@ seed: ## Seed the database with test data
 
 db-shell: 
 	docker compose exec db psql -U remix_user -d remix_db
+
+repl: ## Start the REPL
+	npx ts-node
+
 	

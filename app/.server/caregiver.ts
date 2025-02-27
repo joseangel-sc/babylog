@@ -26,3 +26,21 @@ export async function removeCaregiver(babyId: number, userId: number) {
     },
   });
 }
+
+export async function addBabyOwner(babyId: number, userId: number) {
+  return db.baby.update({
+    where: { id: babyId },
+    data: { ownerId: userId },
+  });
+}
+
+export async function inviteNewCaregiver(babyId: number, email: string, senderId: number) {
+  return db.parentInvite.create({
+    data: {
+      email,
+      babyId,
+      senderId,
+      status: "PENDING",
+    },
+  });
+}
