@@ -95,6 +95,13 @@ export default function BabyDetails() {
         <h1 className="text-2xl font-bold">
           {baby.firstName} {baby.lastName}
         </h1>
+        <button
+              onClick={() => setShowCaregiverModal(true)}
+              className="p-1 rounded-full hover:bg-gray-100"
+              aria-label="Add caregiver"
+            >
+              <PlusIcon className="w-5 h-5" />
+            </button>
         <span className="text-lg font-normal text-gray-600">
           {t('baby.caregivers')}: {caregivers}
         </span>
