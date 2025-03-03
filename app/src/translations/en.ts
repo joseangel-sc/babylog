@@ -128,11 +128,17 @@ export const en = {
   },
   modal: {
     track: 'Track',
+    addCaregiver: 'Add caregiver',
+    email: 'Email',
+    confirmation: 'An email invite will be send to:',
     actions: {
       cancel: 'Cancel',
-      save: 'Save'
+      save: 'Save',
+      next: 'Next',
+      back: 'Back',
+      confirm: 'Confirm'
     },
-    close: 'close'
+    close: 'cerrar'
   },
   settings: {
     language: "Language"
