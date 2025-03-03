@@ -130,9 +130,15 @@ export const es: TranslationKeys = {
   },
   modal: {
     track: 'Registrar',
+    addCaregiver: 'Agregar cuidador',
+    email: 'Correo electrónico',
+    confirmation: 'Se enviará una invitación al siguiente correo:',
     actions: {
       cancel: 'Cancelar',
-      save: 'Guardar'
+      save: 'Guardar',
+      next: 'Siguiente',
+      back: 'Cancelar',
+      confirm: 'Confirmar'
     },
     close: 'cerrar'
   },

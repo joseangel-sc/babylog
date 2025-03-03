@@ -5,6 +5,7 @@ import {
   useActionData,
   useNavigation,
 } from "@remix-run/react";
+import { t } from "~/src/utils/translate";
 
 interface AddCaregiverModalProps {
   babyId: number;
@@ -50,7 +51,9 @@ export default function AddCaregiverModal({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg max-w-md w-full">
-        <h2 className="text-xl font-bold mb-4 text-gray-900">Add Caregiver</h2>
+        <h2 className="text-xl font-bold mb-4 text-gray-900">
+          {t("modal.addCaregiver")}
+        </h2>
 
         <Form
           method="post"
@@ -61,7 +64,7 @@ export default function AddCaregiverModal({
           {!showConfirmation ? (
             <div>
               <label className="block text-sm font-medium text-gray-900">
-                Email
+                {t("modal.email")}
                 <input
                   type="email"
                   name="email"
@@ -75,7 +78,7 @@ export default function AddCaregiverModal({
           ) : (
             <div className="space-y-4">
               <p className="text-gray-900">
-                An email invite will be sent to{" "}
+                {t("modal.confirmation")}{" "}
                 <span className="font-semibold">{email}</span>
               </p>
               <input type="hidden" name="email" value={email} />
@@ -94,7 +97,9 @@ export default function AddCaregiverModal({
               }
               className="px-4 py-2 text-gray-600 hover:text-gray-800"
             >
-              {showConfirmation ? "Back" : "Cancel"}
+              {showConfirmation
+                ? t("modal.actions.back")
+                : t("modal.actions.cancel")}
             </button>
             <button
               type="submit"
@@ -104,8 +109,8 @@ export default function AddCaregiverModal({
               {navigation.state === "submitting"
                 ? "Submitting..."
                 : showConfirmation
-                ? "Confirm"
-                : "Next"}
+                ? t("modal.actions.confirm")
+                : t("modal.actions.next")}
             </button>
           </div>
         </Form>
