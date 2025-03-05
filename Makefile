@@ -64,6 +64,12 @@ dev: db-start prisma-generate ## Start everything for development
 	@make init-db
 	@make start
 
+dev-refresh: ## Reset server and container for development (resets port 5173)
+	make stop 
+	lsof -i :5173 -t | xargs kill -9 || echo "No process running on port 5173"
+	make db-restart
+	make start
+
 reset-all: ## Reset everything - database, migrations, and node modules
 	make db-clean
 	rm -rf node_modules

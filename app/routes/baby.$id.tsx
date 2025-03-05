@@ -6,7 +6,7 @@ import { requireUserId } from "~/.server/session";
 import { getRecentTrackingEvents } from "~/.server/tracking";
 import { PlusIcon } from "lucide-react";
 import AddCaregiverModal from "~/components/AddCaregiverModal";
-import { t } from '~/src/utils/translate';
+import { t } from "~/src/utils/translate";
 import { LanguageSelector } from "~/components/LanguageSelector";
 
 interface Elimination {
@@ -70,8 +70,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (!baby) return redirect("/dashboard");
 
   const isAuthorized =
-    baby.ownerId === userId || (baby as Baby).caregivers.some((c: Caregiver) => c.userId === userId);
-  
+    baby.ownerId === userId ||
+    (baby as Baby).caregivers.some((c: Caregiver) => c.userId === userId);
+
   if (!isAuthorized) return redirect("/dashboard");
 
   const { eliminations, feedings, sleepSessions } =
@@ -96,17 +97,19 @@ export default function BabyDetails() {
           {baby.firstName} {baby.lastName}
         </h1>
         <button
-              onClick={() => setShowCaregiverModal(true)}
-              className="p-1 rounded-full hover:bg-gray-100"
-              aria-label="Add caregiver"
-            >
-              <PlusIcon className="w-5 h-5" />
-            </button>
+          onClick={() => setShowCaregiverModal(true)}
+          className="p-1 rounded-full hover:bg-gray-100"
+          aria-label="Add caregiver"
+        >
+          <PlusIcon className="w-5 h-5" />
+        </button>
         <span className="text-lg font-normal text-gray-600">
-          {t('baby.caregivers')}: {caregivers}
+          {t("baby.caregivers")}: {caregivers}
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-300">{t('settings.language')}:</span>
+          <span className="text-sm text-gray-300">
+            {t("settings.language")}:
+          </span>
           <LanguageSelector />
         </div>
       </div>
@@ -115,7 +118,9 @@ export default function BabyDetails() {
         {/* Eliminations */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">Recent Eliminations</h2>
+            <h2 className="text-lg font-semibold text-gray-800">
+              {t("baby.recent.eliminations")}
+            </h2>
             <div className="flex items-center gap-2">
               <Link
                 to={`/baby/${baby.id}/track/elimination`}
@@ -128,12 +133,14 @@ export default function BabyDetails() {
                 to={`/baby/${baby.id}/eliminations`}
                 className="text-blue-500 hover:underline"
               >
-                {t('baby.recent.viewAll')}
+                {t("baby.recent.viewAll")}
               </Link>
             </div>
           </div>
           {eliminations.length === 0 ? (
-            <p className="text-gray-500">{t('baby.recent.noData.eliminations')}</p>
+            <p className="text-gray-500">
+              {t("baby.recent.noData.eliminations")}
+            </p>
           ) : (
             <ul className="space-y-3">
               {eliminations.map((elimination: Elimination) => (
@@ -146,7 +153,7 @@ export default function BabyDetails() {
                   </div>
                   {elimination.weight && (
                     <div className="text-sm text-gray-600">
-                      {t('baby.details.weight')}: {elimination.weight}g
+                      {t("baby.details.weight")}: {elimination.weight}g
                     </div>
                   )}
                 </li>
@@ -158,7 +165,9 @@ export default function BabyDetails() {
         {/* Feedings */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">Recent Feedings</h2>
+            <h2 className="text-lg font-semibold text-gray-800">
+              {t("baby.recent.feedings")}
+            </h2>
             <div className="flex items-center gap-2">
               <Link
                 to={`/baby/${baby.id}/track/feeding`}
@@ -171,12 +180,12 @@ export default function BabyDetails() {
                 to={`/baby/${baby.id}/feedings`}
                 className="text-blue-500 hover:underline"
               >
-                {t('baby.recent.viewAll')}
+                {t("baby.recent.viewAll")}
               </Link>
             </div>
           </div>
           {feedings.length === 0 ? (
-            <p className="text-gray-500">{t('baby.recent.noData.feedings')}</p>
+            <p className="text-gray-500">{t("baby.recent.noData.feedings")}</p>
           ) : (
             <ul className="space-y-3">
               {feedings.map((feeding: Feeding) => (
@@ -189,7 +198,7 @@ export default function BabyDetails() {
                   </div>
                   {feeding.amount && (
                     <div className="text-sm text-gray-600">
-                      {t('baby.details.amount')}: {feeding.amount}ml
+                      {t("baby.details.amount")}: {feeding.amount}ml
                     </div>
                   )}
                 </li>
@@ -201,7 +210,9 @@ export default function BabyDetails() {
         {/* Sleep */}
         <div className="bg-white shadow rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">Recent Sleep</h2>
+            <h2 className="text-lg font-semibold text-gray-800">
+              {t("baby.recent.sleep")}
+            </h2>
             <div className="flex items-center gap-2">
               <Link
                 to={`/baby/${baby.id}/track/sleep`}
@@ -214,12 +225,12 @@ export default function BabyDetails() {
                 to={`/baby/${baby.id}/sleep`}
                 className="text-blue-500 hover:underline"
               >
-                {t('baby.recent.viewAll')}
+                {t("baby.recent.viewAll")}
               </Link>
             </div>
           </div>
           {sleepSessions.length === 0 ? (
-            <p className="text-gray-500">{t('baby.recent.noData.sleep')}</p>
+            <p className="text-gray-500">{t("baby.recent.noData.sleep")}</p>
           ) : (
             <ul className="space-y-3">
               {sleepSessions.map((sleep: Sleep) => (
@@ -232,7 +243,7 @@ export default function BabyDetails() {
                   </div>
                   {sleep.quality && (
                     <div className="text-sm text-gray-600">
-                      {t('baby.details.quality')}: {sleep.quality}/5
+                      {t("baby.details.quality")}: {sleep.quality}/5
                     </div>
                   )}
                 </li>
